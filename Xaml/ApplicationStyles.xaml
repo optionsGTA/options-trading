@@ -1,0 +1,605 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:themes="http://schemas.actiprosoftware.com/winfx/xaml/themes"
+    xmlns:docking="http://schemas.actiprosoftware.com/winfx/xaml/docking"
+    xmlns:shared="http://schemas.actiprosoftware.com/winfx/xaml/shared"
+    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    
+    <CornerRadius x:Key="{x:Static themes:AssetResourceKeys.DockingWindowContainerTitleBarBorderNormalCornerRadiusKey}">0</CornerRadius>
+    <CornerRadius x:Key="{x:Static themes:AssetResourceKeys.TabbedMdiContainerTabItemBorderNormalCornerRadiusKey}">0</CornerRadius>
+    <CornerRadius x:Key="{x:Static themes:AssetResourceKeys.ToolWindowContainerTabItemBorderNormalCornerRadiusKey}">0</CornerRadius>
+    <system:Boolean x:Key="{x:Static themes:AssetResourceKeys.DockingWindowContainerTitleBarHasGripperBooleanKey}">False</system:Boolean>
+    <Thickness x:Key="{x:Static themes:AssetResourceKeys.ToolWindowContainerTabControlBorderNormalThicknessKey}">0</Thickness>
+    <system:Double x:Key="{x:Static themes:AssetResourceKeys.ToolWindowContainerTabItemSpacingNormalDoubleKey}">3</system:Double>
+
+    <!--    <Thickness x:Key="{x:Static themes:AssetResourceKeys.ToolWindowContainerTabItemBorderNormalThicknessKey}">0</Thickness>-->
+
+    <Style x:Key="WindowControlStyle1" TargetType="{x:Type docking:WindowControl}">
+        <Setter Property="Background" Value="{DynamicResource {ComponentResourceKey ResourceId=WindowBackgroundNormalBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource {ComponentResourceKey ResourceId=WindowBorderInactiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}"/>
+        <Setter Property="BorderThickness" Value="{DynamicResource {ComponentResourceKey ResourceId=WindowBorderNormalThicknessKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}"/>
+        <Setter Property="CornerRadius" Value="{DynamicResource {ComponentResourceKey ResourceId=WindowControlBorderNormalCornerRadiusKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}"/>
+        <Setter Property="Foreground" Value="{DynamicResource {ComponentResourceKey ResourceId=WindowForegroundNormalBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}"/>
+        <Setter Property="TitleBarFontWeight" Value="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarFontWeightKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}"/>
+        <Setter Property="IsTitleBarTextShadowEnabled" Value="True"/>
+        <Setter Property="MinHeight" Value="30"/>
+        <Setter Property="MinWidth" Value="123"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type docking:WindowControl}">
+                    <Grid x:Name="grid">
+                        <shared:DropShadowChrome x:Name="dropShadow" Color="{TemplateBinding DropShadowColor}" IsHitTestVisible="False" XOffset="0" YOffset="0" ZOffset="{TemplateBinding DropShadowZOffset}">
+                            <shared:DropShadowChrome.BorderThickness>
+                                <Binding Path="DropShadowZOffset" RelativeSource="{RelativeSource TemplatedParent}">
+                                    <Binding.Converter>
+                                        <shared:ThicknessConverter AllowNegative="True" Multiplier="1"/>
+                                    </Binding.Converter>
+                                </Binding>
+                            </shared:DropShadowChrome.BorderThickness>
+                        </shared:DropShadowChrome>
+                        <AdornerDecorator SnapsToDevicePixels="True">
+                            <Grid>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition x:Name="WindowLeftBorderColumn" Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition x:Name="WindowRightBorderColumn" Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition x:Name="WindowTopBorderRow" Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition x:Name="WindowInnerBorderRow" Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition x:Name="WindowBottomBorderRow" Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Border x:Name="WindowInnerTopBorder" Background="{DynamicResource {ComponentResourceKey ResourceId=WindowInnerBorderTopInactiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}" Grid.ColumnSpan="3" CornerRadius="{TemplateBinding CornerRadius}" Height="0" Grid.Row="0"/>
+                                    <Border x:Name="PART_TitleBar" Background="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarBackgroundInactiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}" Grid.ColumnSpan="3" Grid.Row="1" SnapsToDevicePixels="True" Panel.ZIndex="1">
+                                        <DockPanel LastChildFill="True" Margin="4,0">
+                                            <StackPanel DockPanel.Dock="Right" Margin="0" Orientation="Horizontal">
+                                                <Button x:Name="minimizeButton" ContentTemplate="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarButtonMinimizeGlyphTemplateKey, TypeInTargetAssembly={x:Type themes:SharedResourceKeys}}}" themes:ThemeProperties.IsActive="{TemplateBinding IsActive}" AutomationProperties.Name="Minimize" Style="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarButtonBaseStyleKey, TypeInTargetAssembly={x:Type themes:SharedResourceKeys}}}" ToolTip="Minimize">
+                                                    <Button.Command>
+                                                        <RoutedUICommand Text="Minimize"/>
+                                                    </Button.Command>
+                                                </Button>
+                                                <Button x:Name="restoreButton" ContentTemplate="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarButtonRestoreGlyphTemplateKey, TypeInTargetAssembly={x:Type themes:SharedResourceKeys}}}" themes:ThemeProperties.IsActive="{TemplateBinding IsActive}" AutomationProperties.Name="Restore" Style="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarButtonBaseStyleKey, TypeInTargetAssembly={x:Type themes:SharedResourceKeys}}}" ToolTip="Restore">
+                                                    <Button.Command>
+                                                        <RoutedUICommand Text="Restore"/>
+                                                    </Button.Command>
+                                                </Button>
+                                                <Button x:Name="maximizeButton" ContentTemplate="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarButtonMaximizeGlyphTemplateKey, TypeInTargetAssembly={x:Type themes:SharedResourceKeys}}}" themes:ThemeProperties.IsActive="{TemplateBinding IsActive}" AutomationProperties.Name="Maximize" Style="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarButtonBaseStyleKey, TypeInTargetAssembly={x:Type themes:SharedResourceKeys}}}" ToolTip="Maximize">
+                                                    <Button.Command>
+                                                        <RoutedUICommand Text="Maximize"/>
+                                                    </Button.Command>
+                                                </Button>
+                                                <Button x:Name="closeButton" ContentTemplate="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarButtonCloseGlyphTemplateKey, TypeInTargetAssembly={x:Type themes:SharedResourceKeys}}}" themes:ThemeProperties.IsActive="{TemplateBinding IsActive}" AutomationProperties.Name="Close" Style="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarButtonBaseAlternateStyleKey, TypeInTargetAssembly={x:Type themes:SharedResourceKeys}}}" ToolTip="Close">
+                                                    <Button.Command>
+                                                        <RoutedUICommand Text="Close"/>
+                                                    </Button.Command>
+                                                </Button>
+                                            </StackPanel>
+                                            <Image x:Name="PART_Icon" DockPanel.Dock="Left" Height="16" Source="{TemplateBinding Icon}" Width="16"/>
+                                            <docking:ReverseMeasureDockPanel>
+                                                <shared:PixelSnapper DockPanel.Dock="Left">
+                                                    <Grid>
+                                                        <TextBlock x:Name="TitleBarTextShadow" Foreground="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarForegroundShadowActiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}" FontWeight="{TemplateBinding TitleBarFontWeight}" FontStyle="{DynamicResource {x:Static SystemFonts.CaptionFontStyleKey}}" FontSize="{DynamicResource {x:Static SystemFonts.CaptionFontSizeKey}}" FontFamily="{DynamicResource {x:Static SystemFonts.CaptionFontFamilyKey}}" Margin="4" Text="{TemplateBinding Title}" TextTrimming="CharacterEllipsis" Visibility="Collapsed" VerticalAlignment="Center">
+                                                            <TextBlock.RenderTransform>
+                                                                <TranslateTransform X="1" Y="1"/>
+                                                            </TextBlock.RenderTransform>
+                                                        </TextBlock>
+                                                        <TextBlock x:Name="TitleBarText" Foreground="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarForegroundInactiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}" FontWeight="{TemplateBinding TitleBarFontWeight}" FontStyle="{DynamicResource {x:Static SystemFonts.CaptionFontStyleKey}}" FontSize="{DynamicResource {x:Static SystemFonts.CaptionFontSizeKey}}" FontFamily="{DynamicResource {x:Static SystemFonts.CaptionFontFamilyKey}}" Margin="4" Text="{TemplateBinding Title}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
+                                                    </Grid>
+                                                </shared:PixelSnapper>
+                                                <ContentPresenter x:Name="contextContentPresenter" ContentTemplate="{TemplateBinding ContextContentTemplate}" Content="{TemplateBinding ContextContent}" DockPanel.Dock="Left" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                                            </docking:ReverseMeasureDockPanel>
+                                        </DockPanel>
+                                    </Border>
+                                    <Rectangle x:Name="WindowTitleBarLeftInnerBorder" Grid.Column="0" Fill="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarInnerBorderInactiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}" Grid.Row="2" Width="0"/>
+                                    <Rectangle x:Name="TitleBarInnerBorder" Grid.Column="1" Fill="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarInnerBorderInactiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}" Height="0" Grid.Row="2" SnapsToDevicePixels="True"/>
+                                    <Rectangle x:Name="WindowTitleBarRightInnerBorder" Grid.Column="2" Fill="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarInnerBorderInactiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}" Grid.Row="2" Width="0"/>
+                                    <Rectangle x:Name="WindowInnerLeftBorder" Grid.Column="0" Fill="{DynamicResource {ComponentResourceKey ResourceId=WindowInnerBorderLeftInactiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}" Grid.Row="3" SnapsToDevicePixels="True" Width="0"/>
+                                    <Rectangle x:Name="WindowInnerRightBorder" Grid.Column="2" Fill="{DynamicResource {ComponentResourceKey ResourceId=WindowInnerBorderRightInactiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}" Grid.Row="3" SnapsToDevicePixels="True" Width="0"/>
+                                    <Border x:Name="WindowInnerBottomBorder" Background="{DynamicResource {ComponentResourceKey ResourceId=WindowInnerBorderBottomInactiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}" Grid.ColumnSpan="3" Height="0" Grid.Row="4"/>
+                                    <Border Background="{TemplateBinding Background}" Grid.Column="1" Grid.Row="3" SnapsToDevicePixels="True" Panel.ZIndex="100">
+                                        <ContentPresenter x:Name="content" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Margin="{TemplateBinding Padding}"/>
+                                    </Border>
+                                </Grid>
+                                <Border x:Name="WindowOuterBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="{TemplateBinding CornerRadius}"/>
+                            </Grid>
+                        </AdornerDecorator>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Icon" Value="{x:Null}">
+                            <Setter Property="Visibility" TargetName="PART_Icon" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="HasIcon" Value="False">
+                            <Setter Property="Visibility" TargetName="PART_Icon" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="HasDropShadow" Value="False">
+                            <Setter Property="Color" TargetName="dropShadow" Value="Transparent"/>
+                        </Trigger>
+                        <Trigger Property="WindowState" Value="Minimized">
+                            <Setter Property="Visibility" TargetName="minimizeButton" Value="Collapsed"/>
+                            <Setter Property="Height" TargetName="WindowInnerBorderRow" Value="0"/>
+                            <Setter Property="Visibility" TargetName="content" Value="Collapsed"/>
+                            <Setter Property="MinWidth" Value="0"/>
+                            <Setter Property="MinHeight" Value="0"/>
+                            <Setter Property="Width" Value="160"/>
+                        </Trigger>
+                        <Trigger Property="WindowState" Value="Normal">
+                            <Setter Property="Visibility" TargetName="restoreButton" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="WindowState" Value="Maximized">
+                            <Setter Property="Visibility" TargetName="maximizeButton" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="ResizeMode" Value="NoResize">
+                            <Setter Property="Visibility" TargetName="minimizeButton" Value="Collapsed"/>
+                            <Setter Property="Visibility" TargetName="maximizeButton" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="HasMinimizeButton" Value="False">
+                            <Setter Property="Visibility" TargetName="minimizeButton" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="HasRestoreButton" Value="False">
+                            <Setter Property="Visibility" TargetName="restoreButton" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="HasMaximizeButton" Value="False">
+                            <Setter Property="Visibility" TargetName="maximizeButton" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="HasCloseButton" Value="False">
+                            <Setter Property="Visibility" TargetName="closeButton" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="CornerRadius" Value="5">
+                            <Setter Property="CornerRadius" TargetName="WindowInnerBottomBorder" Value="0,0,5,5"/>
+                        </Trigger>
+                        <Trigger Property="IsActive" Value="True">
+                            <Setter Property="BorderBrush" TargetName="WindowOuterBorder" Value="{DynamicResource {ComponentResourceKey ResourceId=WindowBorderActiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}"/>
+                            <Setter Property="Background" TargetName="WindowInnerTopBorder" Value="{DynamicResource {ComponentResourceKey ResourceId=WindowInnerBorderTopActiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}"/>
+                            <Setter Property="Fill" TargetName="WindowTitleBarLeftInnerBorder" Value="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarInnerBorderActiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}"/>
+                            <Setter Property="Fill" TargetName="WindowTitleBarRightInnerBorder" Value="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarInnerBorderActiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}"/>
+                            <Setter Property="Fill" TargetName="WindowInnerLeftBorder" Value="{DynamicResource {ComponentResourceKey ResourceId=WindowInnerBorderLeftActiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}"/>
+                            <Setter Property="Fill" TargetName="WindowInnerRightBorder" Value="{DynamicResource {ComponentResourceKey ResourceId=WindowInnerBorderRightActiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}"/>
+                            <Setter Property="Background" TargetName="WindowInnerBottomBorder" Value="{DynamicResource {ComponentResourceKey ResourceId=WindowInnerBorderBottomActiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}"/>
+                            <Setter Property="Background" TargetName="PART_TitleBar" Value="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarBackgroundActiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}"/>
+                            <Setter Property="Foreground" TargetName="TitleBarText" Value="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarForegroundActiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}"/>
+                            <Setter Property="Fill" TargetName="TitleBarInnerBorder" Value="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarInnerBorderActiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}"/>
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsActive" Value="True"/>
+                                <Condition Property="IsTitleBarTextShadowEnabled" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Visibility" TargetName="TitleBarTextShadow" Value="Visible"/>
+                        </MultiTrigger>
+                        <Trigger Property="HasTitleBar" Value="False">
+                            <Setter Property="Visibility" TargetName="PART_TitleBar" Value="Collapsed"/>
+                            <Setter Property="Height" TargetName="WindowInnerBorderRow" Value="0"/>
+                            <Setter Property="Visibility" TargetName="WindowTitleBarLeftInnerBorder" Value="Collapsed"/>
+                            <Setter Property="Visibility" TargetName="TitleBarInnerBorder" Value="Collapsed"/>
+                            <Setter Property="Visibility" TargetName="WindowTitleBarRightInnerBorder" Value="Collapsed"/>
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="ContextContent" Value="{x:Null}"/>
+                                <Condition Property="ContextContentTemplate" Value="{x:Null}"/>
+                                <Condition Property="ContextContentTemplateSelector" Value="{x:Null}"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Visibility" TargetName="contextContentPresenter" Value="Collapsed"/>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMaximizedFrameVisible" Value="True"/>
+                                <Condition Property="WindowState" Value="Maximized"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Margin" TargetName="grid" Value="-4"/>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMaximizedFrameVisible" Value="False"/>
+                                <Condition Property="WindowState" Value="Maximized"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Visibility" TargetName="PART_TitleBar" Value="Collapsed"/>
+                            <Setter Property="Height" TargetName="WindowTopBorderRow" Value="0"/>
+                            <Setter Property="Height" TargetName="WindowInnerBorderRow" Value="0"/>
+                            <Setter Property="Height" TargetName="WindowBottomBorderRow" Value="0"/>
+                            <Setter Property="Width" TargetName="WindowLeftBorderColumn" Value="0"/>
+                            <Setter Property="Width" TargetName="WindowRightBorderColumn" Value="0"/>
+                            <Setter Property="Visibility" TargetName="WindowInnerTopBorder" Value="Collapsed"/>
+                            <Setter Property="Visibility" TargetName="WindowTitleBarLeftInnerBorder" Value="Collapsed"/>
+                            <Setter Property="Visibility" TargetName="TitleBarInnerBorder" Value="Collapsed"/>
+                            <Setter Property="Visibility" TargetName="WindowTitleBarRightInnerBorder" Value="Collapsed"/>
+                            <Setter Property="Visibility" TargetName="WindowInnerLeftBorder" Value="Collapsed"/>
+                            <Setter Property="Visibility" TargetName="WindowInnerRightBorder" Value="Collapsed"/>
+                            <Setter Property="Visibility" TargetName="WindowInnerBottomBorder" Value="Collapsed"/>
+                            <Setter Property="Visibility" TargetName="dropShadow" Value="Collapsed"/>
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="WindowStyle" Value="ToolWindow">
+                <Setter Property="HasIcon" Value="False"/>
+                <Setter Property="HasMinimizeButton" Value="False"/>
+                <Setter Property="HasRestoreButton" Value="False"/>
+                <Setter Property="HasMaximizeButton" Value="False"/>
+                <Setter Property="CornerRadius" Value="0"/>
+                <Setter Property="MinWidth" Value="30"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type docking:WindowControl}">
+                            <Grid x:Name="grid">
+                                <shared:DropShadowChrome x:Name="dropShadow" Color="{TemplateBinding DropShadowColor}" IsHitTestVisible="False" XOffset="0" YOffset="0" ZOffset="{TemplateBinding DropShadowZOffset}">
+                                    <shared:DropShadowChrome.BorderThickness>
+                                        <Binding Path="DropShadowZOffset" RelativeSource="{RelativeSource TemplatedParent}">
+                                            <Binding.Converter>
+                                                <shared:ThicknessConverter AllowNegative="True" Multiplier="1"/>
+                                            </Binding.Converter>
+                                        </Binding>
+                                    </shared:DropShadowChrome.BorderThickness>
+                                </shared:DropShadowChrome>
+                                <AdornerDecorator SnapsToDevicePixels="True">
+                                    <Grid>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition x:Name="WindowLeftBorderColumn" Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition x:Name="WindowRightBorderColumn" Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition x:Name="WindowTopBorderRow" Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition x:Name="WindowInnerBorderRow" Height="Auto"/>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition x:Name="WindowBottomBorderRow" Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            <Border x:Name="WindowInnerTopBorder" Background="{DynamicResource {ComponentResourceKey ResourceId=WindowInnerBorderTopInactiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}" Grid.ColumnSpan="3" Height="1" Grid.Row="0"/>
+                                            <Border x:Name="PART_TitleBar" Background="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarBackgroundInactiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}" Grid.ColumnSpan="3" Grid.Row="1" SnapsToDevicePixels="True" Panel.ZIndex="1">
+                                                <DockPanel LastChildFill="True" Margin="0">
+                                                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Top">
+                                                        <Button x:Name="minimizeButton" ContentTemplate="{DynamicResource {ComponentResourceKey ResourceId=ToolWindowTitleBarButtonMinimizeGlyphTemplateKey, TypeInTargetAssembly={x:Type themes:SharedResourceKeys}}}" themes:ThemeProperties.IsActive="{TemplateBinding IsActive}" AutomationProperties.Name="Minimize" Style="{DynamicResource {ComponentResourceKey ResourceId=ToolWindowTitleBarButtonBaseStyleKey, TypeInTargetAssembly={x:Type themes:SharedResourceKeys}}}" ToolTip="Minimize">
+                                                            <Button.Command>
+                                                                <RoutedUICommand Text="Minimize"/>
+                                                            </Button.Command>
+                                                        </Button>
+                                                        <Button x:Name="restoreButton" ContentTemplate="{DynamicResource {ComponentResourceKey ResourceId=ToolWindowTitleBarButtonRestoreGlyphTemplateKey, TypeInTargetAssembly={x:Type themes:SharedResourceKeys}}}" themes:ThemeProperties.IsActive="{TemplateBinding IsActive}" AutomationProperties.Name="Restore" Style="{DynamicResource {ComponentResourceKey ResourceId=ToolWindowTitleBarButtonBaseStyleKey, TypeInTargetAssembly={x:Type themes:SharedResourceKeys}}}" ToolTip="Restore">
+                                                            <Button.Command>
+                                                                <RoutedUICommand Text="Restore"/>
+                                                            </Button.Command>
+                                                        </Button>
+                                                        <Button x:Name="maximizeButton" ContentTemplate="{DynamicResource {ComponentResourceKey ResourceId=ToolWindowTitleBarButtonMaximizeGlyphTemplateKey, TypeInTargetAssembly={x:Type themes:SharedResourceKeys}}}" themes:ThemeProperties.IsActive="{TemplateBinding IsActive}" AutomationProperties.Name="Maximize" Style="{DynamicResource {ComponentResourceKey ResourceId=ToolWindowTitleBarButtonBaseStyleKey, TypeInTargetAssembly={x:Type themes:SharedResourceKeys}}}" ToolTip="Maximize">
+                                                            <Button.Command>
+                                                                <RoutedUICommand Text="Maximize"/>
+                                                            </Button.Command>
+                                                        </Button>
+                                                        <Button x:Name="closeButton" ContentTemplate="{DynamicResource {ComponentResourceKey ResourceId=ToolWindowTitleBarButtonCloseGlyphTemplateKey, TypeInTargetAssembly={x:Type themes:SharedResourceKeys}}}" themes:ThemeProperties.IsActive="{TemplateBinding IsActive}" AutomationProperties.Name="Close" Style="{DynamicResource {ComponentResourceKey ResourceId=ToolWindowTitleBarButtonBaseAlternateStyleKey, TypeInTargetAssembly={x:Type themes:SharedResourceKeys}}}" ToolTip="Close">
+                                                            <Button.Command>
+                                                                <RoutedUICommand Text="Close"/>
+                                                            </Button.Command>
+                                                        </Button>
+                                                    </StackPanel>
+                                                    <Image x:Name="PART_Icon" DockPanel.Dock="Left" Height="16" Source="{TemplateBinding Icon}" Width="16"/>
+                                                    <docking:ReverseMeasureDockPanel>
+                                                        <shared:PixelSnapper DockPanel.Dock="Left">
+                                                            <TextBlock x:Name="TitleBarText" Foreground="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarForegroundInactiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}" FontWeight="{TemplateBinding TitleBarFontWeight}" FontStyle="{DynamicResource {x:Static SystemFonts.SmallCaptionFontStyleKey}}" FontSize="{DynamicResource {x:Static SystemFonts.SmallCaptionFontSizeKey}}" FontFamily="{DynamicResource {x:Static SystemFonts.SmallCaptionFontFamilyKey}}" Margin="4,1" Text="{TemplateBinding Title}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
+                                                        </shared:PixelSnapper>
+                                                        <ContentPresenter x:Name="contextContentPresenter" ContentTemplate="{TemplateBinding ContextContentTemplate}" Content="{TemplateBinding ContextContent}" DockPanel.Dock="Left" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                                                    </docking:ReverseMeasureDockPanel>
+                                                </DockPanel>
+                                            </Border>
+                                            <Rectangle x:Name="WindowTitleBarLeftInnerBorder" Grid.Column="0" Fill="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarInnerBorderInactiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}" Grid.Row="2" Width="0"/>
+                                            <Rectangle x:Name="TitleBarInnerBorder" Grid.Column="1" Fill="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarInnerBorderInactiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}" Height="0" Grid.Row="2" SnapsToDevicePixels="True"/>
+                                            <Rectangle x:Name="WindowTitleBarRightInnerBorder" Grid.Column="2" Fill="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarInnerBorderInactiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}" Grid.Row="2" Width="0"/>
+                                            <Rectangle x:Name="WindowInnerLeftBorder" Grid.Column="0" Fill="{DynamicResource {ComponentResourceKey ResourceId=WindowInnerBorderLeftInactiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}" Grid.Row="3" SnapsToDevicePixels="True" Width="1"/>
+                                            <Rectangle x:Name="WindowInnerRightBorder" Grid.Column="2" Fill="{DynamicResource {ComponentResourceKey ResourceId=WindowInnerBorderRightInactiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}" Grid.Row="3" SnapsToDevicePixels="True" Width="1"/>
+                                            <Border x:Name="WindowInnerBottomBorder" Background="{DynamicResource {ComponentResourceKey ResourceId=WindowInnerBorderBottomInactiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}" Grid.ColumnSpan="3" Height="1" Grid.Row="4"/>
+                                            <Border Background="{TemplateBinding Background}" Grid.Column="1" Grid.Row="3" SnapsToDevicePixels="True" Panel.ZIndex="100">
+                                                <ContentPresenter x:Name="content" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Margin="{TemplateBinding Padding}"/>
+                                            </Border>
+                                        </Grid>
+                                        <Border x:Name="WindowOuterBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="2" CornerRadius="{TemplateBinding CornerRadius}"/>
+                                    </Grid>
+                                </AdornerDecorator>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="Icon" Value="{x:Null}">
+                                    <Setter Property="Visibility" TargetName="PART_Icon" Value="Collapsed"/>
+                                </Trigger>
+                                <Trigger Property="HasIcon" Value="False">
+                                    <Setter Property="Visibility" TargetName="PART_Icon" Value="Collapsed"/>
+                                </Trigger>
+                                <Trigger Property="HasDropShadow" Value="False">
+                                    <Setter Property="Color" TargetName="dropShadow" Value="Transparent"/>
+                                </Trigger>
+                                <Trigger Property="WindowState" Value="Minimized">
+                                    <Setter Property="Visibility" TargetName="minimizeButton" Value="Collapsed"/>
+                                    <Setter Property="Height" TargetName="WindowInnerBorderRow" Value="0"/>
+                                    <Setter Property="Visibility" TargetName="content" Value="Collapsed"/>
+                                    <Setter Property="MinWidth" Value="0"/>
+                                    <Setter Property="MinHeight" Value="0"/>
+                                    <Setter Property="Width" Value="160"/>
+                                </Trigger>
+                                <Trigger Property="WindowState" Value="Normal">
+                                    <Setter Property="Visibility" TargetName="restoreButton" Value="Collapsed"/>
+                                </Trigger>
+                                <Trigger Property="WindowState" Value="Maximized">
+                                    <Setter Property="Visibility" TargetName="maximizeButton" Value="Collapsed"/>
+                                </Trigger>
+                                <Trigger Property="ResizeMode" Value="NoResize">
+                                    <Setter Property="Visibility" TargetName="minimizeButton" Value="Collapsed"/>
+                                    <Setter Property="Visibility" TargetName="maximizeButton" Value="Collapsed"/>
+                                </Trigger>
+                                <Trigger Property="HasMinimizeButton" Value="False">
+                                    <Setter Property="Visibility" TargetName="minimizeButton" Value="Collapsed"/>
+                                </Trigger>
+                                <Trigger Property="HasRestoreButton" Value="False">
+                                    <Setter Property="Visibility" TargetName="restoreButton" Value="Collapsed"/>
+                                </Trigger>
+                                <Trigger Property="HasMaximizeButton" Value="False">
+                                    <Setter Property="Visibility" TargetName="maximizeButton" Value="Collapsed"/>
+                                </Trigger>
+                                <Trigger Property="HasCloseButton" Value="False">
+                                    <Setter Property="Visibility" TargetName="closeButton" Value="Collapsed"/>
+                                </Trigger>
+                                <Trigger Property="IsActive" Value="True">
+                                    <Setter Property="BorderBrush" TargetName="WindowOuterBorder" Value="{DynamicResource {ComponentResourceKey ResourceId=WindowBorderActiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}"/>
+                                    <Setter Property="Background" TargetName="WindowInnerTopBorder" Value="{DynamicResource {ComponentResourceKey ResourceId=WindowInnerBorderTopActiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}"/>
+                                    <Setter Property="Fill" TargetName="WindowTitleBarLeftInnerBorder" Value="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarInnerBorderActiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}"/>
+                                    <Setter Property="Fill" TargetName="WindowTitleBarRightInnerBorder" Value="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarInnerBorderActiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}"/>
+                                    <Setter Property="Fill" TargetName="WindowInnerLeftBorder" Value="{DynamicResource {ComponentResourceKey ResourceId=WindowInnerBorderLeftActiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}"/>
+                                    <Setter Property="Fill" TargetName="WindowInnerRightBorder" Value="{DynamicResource {ComponentResourceKey ResourceId=WindowInnerBorderRightActiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}"/>
+                                    <Setter Property="Background" TargetName="WindowInnerBottomBorder" Value="{DynamicResource {ComponentResourceKey ResourceId=WindowInnerBorderBottomActiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}"/>
+                                    <Setter Property="Background" TargetName="PART_TitleBar" Value="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarBackgroundActiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}"/>
+                                    <Setter Property="Foreground" TargetName="TitleBarText" Value="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarForegroundActiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}"/>
+                                    <Setter Property="Fill" TargetName="TitleBarInnerBorder" Value="{DynamicResource {ComponentResourceKey ResourceId=WindowTitleBarInnerBorderActiveBrushKey, TypeInTargetAssembly={x:Type themes:AssetResourceKeys}}}"/>
+                                </Trigger>
+                                <Trigger Property="HasTitleBar" Value="False">
+                                    <Setter Property="Visibility" TargetName="PART_TitleBar" Value="Collapsed"/>
+                                    <Setter Property="Height" TargetName="WindowInnerBorderRow" Value="0"/>
+                                    <Setter Property="Visibility" TargetName="WindowTitleBarLeftInnerBorder" Value="Collapsed"/>
+                                    <Setter Property="Visibility" TargetName="TitleBarInnerBorder" Value="Collapsed"/>
+                                    <Setter Property="Visibility" TargetName="WindowTitleBarRightInnerBorder" Value="Collapsed"/>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="ContextContent" Value="{x:Null}"/>
+                                        <Condition Property="ContextContentTemplate" Value="{x:Null}"/>
+                                        <Condition Property="ContextContentTemplateSelector" Value="{x:Null}"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Visibility" TargetName="contextContentPresenter" Value="Collapsed"/>
+                                </MultiTrigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsMaximizedFrameVisible" Value="True"/>
+                                        <Condition Property="WindowState" Value="Maximized"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Margin" TargetName="grid" Value="-4"/>
+                                </MultiTrigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsMaximizedFrameVisible" Value="False"/>
+                                        <Condition Property="WindowState" Value="Maximized"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Visibility" TargetName="PART_TitleBar" Value="Collapsed"/>
+                                    <Setter Property="Height" TargetName="WindowTopBorderRow" Value="0"/>
+                                    <Setter Property="Height" TargetName="WindowInnerBorderRow" Value="0"/>
+                                    <Setter Property="Height" TargetName="WindowBottomBorderRow" Value="0"/>
+                                    <Setter Property="Width" TargetName="WindowLeftBorderColumn" Value="0"/>
+                                    <Setter Property="Width" TargetName="WindowRightBorderColumn" Value="0"/>
+                                    <Setter Property="Visibility" TargetName="WindowInnerTopBorder" Value="Collapsed"/>
+                                    <Setter Property="Visibility" TargetName="WindowTitleBarLeftInnerBorder" Value="Collapsed"/>
+                                    <Setter Property="Visibility" TargetName="TitleBarInnerBorder" Value="Collapsed"/>
+                                    <Setter Property="Visibility" TargetName="WindowTitleBarRightInnerBorder" Value="Collapsed"/>
+                                    <Setter Property="Visibility" TargetName="WindowInnerLeftBorder" Value="Collapsed"/>
+                                    <Setter Property="Visibility" TargetName="WindowInnerRightBorder" Value="Collapsed"/>
+                                    <Setter Property="Visibility" TargetName="WindowInnerBottomBorder" Value="Collapsed"/>
+                                    <Setter Property="Visibility" TargetName="dropShadow" Value="Collapsed"/>
+                                </MultiTrigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="WindowStyle" Value="ToolWindow"/>
+                    <Condition Property="themes:ThemeProperties.UseAlternateStyle" Value="True"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type docking:WindowControl}">
+                            <ControlTemplate.Resources>
+                                <shared:ThicknessConverter x:Key="ThicknessConverter" AllowNegative="True" Multiplier="1"/>
+                            </ControlTemplate.Resources>
+                            <Grid x:Name="grid">
+                                <shared:DropShadowChrome x:Name="dropShadow" Color="{TemplateBinding DropShadowColor}" IsHitTestVisible="False" XOffset="0" YOffset="0" ZOffset="{TemplateBinding DropShadowZOffset}">
+                                    <shared:DropShadowChrome.BorderThickness>
+                                        <Binding Path="DropShadowZOffset" RelativeSource="{RelativeSource TemplatedParent}">
+                                            <Binding.Converter>
+                                                <shared:ThicknessConverter AllowNegative="True" Multiplier="1"/>
+                                            </Binding.Converter>
+                                        </Binding>
+                                    </shared:DropShadowChrome.BorderThickness>
+                                </shared:DropShadowChrome>
+                                <AdornerDecorator SnapsToDevicePixels="True">
+                                    <Border x:Name="WindowOuterBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="2" Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding CornerRadius}">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition x:Name="WindowLeftBorderColumn" Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition x:Name="WindowRightBorderColumn" Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition x:Name="WindowTopBorderRow" Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition x:Name="WindowInnerBorderRow" Height="Auto"/>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition x:Name="WindowBottomBorderRow" Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            <Border x:Name="WindowInnerTopBorder" Background="Transparent" Grid.ColumnSpan="3" Height="0" Grid.Row="0"/>
+                                            <Border x:Name="PART_TitleBar" Background="Transparent" Grid.ColumnSpan="3" Grid.Row="1" SnapsToDevicePixels="True" Panel.ZIndex="1">
+                                                <DockPanel LastChildFill="True" Margin="0">
+                                                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Top">
+                                                        <Button x:Name="minimizeButton" ContentTemplate="{DynamicResource {ComponentResourceKey ResourceId=ToolWindowTitleBarButtonMinimizeGlyphTemplateKey, TypeInTargetAssembly={x:Type themes:SharedResourceKeys}}}" themes:ThemeProperties.IsActive="{TemplateBinding IsActive}" AutomationProperties.Name="Minimize" Style="{DynamicResource {ComponentResourceKey ResourceId=ToolWindowTitleBarButtonBaseStyleKey, TypeInTargetAssembly={x:Type themes:SharedResourceKeys}}}" ToolTip="Minimize">
+                                                            <Button.Command>
+                                                                <RoutedUICommand Text="Minimize"/>
+                                                            </Button.Command>
+                                                        </Button>
+                                                        <Button x:Name="restoreButton" ContentTemplate="{DynamicResource {ComponentResourceKey ResourceId=ToolWindowTitleBarButtonRestoreGlyphTemplateKey, TypeInTargetAssembly={x:Type themes:SharedResourceKeys}}}" themes:ThemeProperties.IsActive="{TemplateBinding IsActive}" AutomationProperties.Name="Restore" Style="{DynamicResource {ComponentResourceKey ResourceId=ToolWindowTitleBarButtonBaseStyleKey, TypeInTargetAssembly={x:Type themes:SharedResourceKeys}}}" ToolTip="Restore">
+                                                            <Button.Command>
+                                                                <RoutedUICommand Text="Restore"/>
+                                                            </Button.Command>
+                                                        </Button>
+                                                        <Button x:Name="maximizeButton" ContentTemplate="{DynamicResource {ComponentResourceKey ResourceId=ToolWindowTitleBarButtonMaximizeGlyphTemplateKey, TypeInTargetAssembly={x:Type themes:SharedResourceKeys}}}" themes:ThemeProperties.IsActive="{TemplateBinding IsActive}" AutomationProperties.Name="Maximize" Style="{DynamicResource {ComponentResourceKey ResourceId=ToolWindowTitleBarButtonBaseStyleKey, TypeInTargetAssembly={x:Type themes:SharedResourceKeys}}}" ToolTip="Maximize">
+                                                            <Button.Command>
+                                                                <RoutedUICommand Text="Maximize"/>
+                                                            </Button.Command>
+                                                        </Button>
+                                                        <Button x:Name="closeButton" ContentTemplate="{DynamicResource {ComponentResourceKey ResourceId=ToolWindowTitleBarButtonCloseGlyphTemplateKey, TypeInTargetAssembly={x:Type themes:SharedResourceKeys}}}" themes:ThemeProperties.IsActive="{TemplateBinding IsActive}" AutomationProperties.Name="Close" Style="{DynamicResource {ComponentResourceKey ResourceId=ToolWindowTitleBarButtonBaseAlternateStyleKey, TypeInTargetAssembly={x:Type themes:SharedResourceKeys}}}" ToolTip="Close">
+                                                            <Button.Command>
+                                                                <RoutedUICommand Text="Close"/>
+                                                            </Button.Command>
+                                                        </Button>
+                                                    </StackPanel>
+                                                    <Image x:Name="PART_Icon" DockPanel.Dock="Left" Height="16" Source="{TemplateBinding Icon}" Width="16"/>
+                                                    <docking:ReverseMeasureDockPanel>
+                                                        <shared:PixelSnapper DockPanel.Dock="Left">
+                                                            <TextBlock x:Name="TitleBarText" FontWeight="{TemplateBinding TitleBarFontWeight}" FontStyle="{DynamicResource {x:Static SystemFonts.SmallCaptionFontStyleKey}}" FontSize="{DynamicResource {x:Static SystemFonts.SmallCaptionFontSizeKey}}" FontFamily="{DynamicResource {x:Static SystemFonts.SmallCaptionFontFamilyKey}}" Margin="4,1" Text="{TemplateBinding Title}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
+                                                        </shared:PixelSnapper>
+                                                        <ContentPresenter x:Name="contextContentPresenter" ContentTemplate="{TemplateBinding ContextContentTemplate}" Content="{TemplateBinding ContextContent}" DockPanel.Dock="Left" Margin="0,0,4,0" VerticalAlignment="Center"/>
+                                                    </docking:ReverseMeasureDockPanel>
+                                                </DockPanel>
+                                            </Border>
+                                            <Rectangle x:Name="WindowTitleBarLeftInnerBorder" Grid.Column="0" Fill="Transparent" Grid.Row="2" Width="0"/>
+                                            <Rectangle x:Name="TitleBarInnerBorder" Grid.Column="1" Fill="Transparent" Height="0" Grid.Row="2" SnapsToDevicePixels="True"/>
+                                            <Rectangle x:Name="WindowTitleBarRightInnerBorder" Grid.Column="2" Fill="Transparent" Grid.Row="2" Width="0"/>
+                                            <Rectangle x:Name="WindowInnerLeftBorder" Grid.Column="0" Fill="Transparent" Grid.Row="3" SnapsToDevicePixels="True" Width="0"/>
+                                            <Rectangle x:Name="WindowInnerRightBorder" Grid.Column="2" Fill="Transparent" Grid.Row="3" SnapsToDevicePixels="True" Width="0"/>
+                                            <Border x:Name="WindowInnerBottomBorder" Background="Transparent" Grid.ColumnSpan="3" Height="0" Grid.Row="4"/>
+                                            <Border Grid.Column="1" Grid.Row="3" SnapsToDevicePixels="True" Panel.ZIndex="100">
+                                                <ContentPresenter x:Name="content" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Margin="{TemplateBinding Padding}"/>
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+                                </AdornerDecorator>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="Icon" Value="{x:Null}">
+                                    <Setter Property="Visibility" TargetName="PART_Icon" Value="Collapsed"/>
+                                </Trigger>
+                                <Trigger Property="HasIcon" Value="False">
+                                    <Setter Property="Visibility" TargetName="PART_Icon" Value="Collapsed"/>
+                                </Trigger>
+                                <Trigger Property="HasDropShadow" Value="False">
+                                    <Setter Property="Color" TargetName="dropShadow" Value="Transparent"/>
+                                </Trigger>
+                                <Trigger Property="WindowState" Value="Minimized">
+                                    <Setter Property="Visibility" TargetName="minimizeButton" Value="Collapsed"/>
+                                    <Setter Property="Height" TargetName="WindowInnerBorderRow" Value="0"/>
+                                    <Setter Property="Visibility" TargetName="content" Value="Collapsed"/>
+                                    <Setter Property="MinWidth" Value="0"/>
+                                    <Setter Property="MinHeight" Value="0"/>
+                                    <Setter Property="Width" Value="160"/>
+                                </Trigger>
+                                <Trigger Property="WindowState" Value="Normal">
+                                    <Setter Property="Visibility" TargetName="restoreButton" Value="Collapsed"/>
+                                </Trigger>
+                                <Trigger Property="WindowState" Value="Maximized">
+                                    <Setter Property="Visibility" TargetName="maximizeButton" Value="Collapsed"/>
+                                </Trigger>
+                                <Trigger Property="ResizeMode" Value="NoResize">
+                                    <Setter Property="Visibility" TargetName="minimizeButton" Value="Collapsed"/>
+                                    <Setter Property="Visibility" TargetName="maximizeButton" Value="Collapsed"/>
+                                </Trigger>
+                                <Trigger Property="HasMinimizeButton" Value="False">
+                                    <Setter Property="Visibility" TargetName="minimizeButton" Value="Collapsed"/>
+                                </Trigger>
+                                <Trigger Property="HasRestoreButton" Value="False">
+                                    <Setter Property="Visibility" TargetName="restoreButton" Value="Collapsed"/>
+                                </Trigger>
+                                <Trigger Property="HasMaximizeButton" Value="False">
+                                    <Setter Property="Visibility" TargetName="maximizeButton" Value="Collapsed"/>
+                                </Trigger>
+                                <Trigger Property="HasCloseButton" Value="False">
+                                    <Setter Property="Visibility" TargetName="closeButton" Value="Collapsed"/>
+                                </Trigger>
+                                <Trigger Property="HasTitleBar" Value="False">
+                                    <Setter Property="Visibility" TargetName="PART_TitleBar" Value="Collapsed"/>
+                                    <Setter Property="Height" TargetName="WindowInnerBorderRow" Value="0"/>
+                                    <Setter Property="Visibility" TargetName="WindowTitleBarLeftInnerBorder" Value="Collapsed"/>
+                                    <Setter Property="Visibility" TargetName="TitleBarInnerBorder" Value="Collapsed"/>
+                                    <Setter Property="Visibility" TargetName="WindowTitleBarRightInnerBorder" Value="Collapsed"/>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="ContextContent" Value="{x:Null}"/>
+                                        <Condition Property="ContextContentTemplate" Value="{x:Null}"/>
+                                        <Condition Property="ContextContentTemplateSelector" Value="{x:Null}"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Visibility" TargetName="contextContentPresenter" Value="Collapsed"/>
+                                </MultiTrigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsMaximizedFrameVisible" Value="True"/>
+                                        <Condition Property="WindowState" Value="Maximized"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Margin" TargetName="grid" Value="-4"/>
+                                </MultiTrigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsMaximizedFrameVisible" Value="False"/>
+                                        <Condition Property="WindowState" Value="Maximized"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Visibility" TargetName="PART_TitleBar" Value="Collapsed"/>
+                                    <Setter Property="Height" TargetName="WindowTopBorderRow" Value="0"/>
+                                    <Setter Property="Height" TargetName="WindowInnerBorderRow" Value="0"/>
+                                    <Setter Property="Height" TargetName="WindowBottomBorderRow" Value="0"/>
+                                    <Setter Property="Width" TargetName="WindowLeftBorderColumn" Value="0"/>
+                                    <Setter Property="Width" TargetName="WindowRightBorderColumn" Value="0"/>
+                                    <Setter Property="Visibility" TargetName="WindowInnerTopBorder" Value="Collapsed"/>
+                                    <Setter Property="Visibility" TargetName="WindowTitleBarLeftInnerBorder" Value="Collapsed"/>
+                                    <Setter Property="Visibility" TargetName="TitleBarInnerBorder" Value="Collapsed"/>
+                                    <Setter Property="Visibility" TargetName="WindowTitleBarRightInnerBorder" Value="Collapsed"/>
+                                    <Setter Property="Visibility" TargetName="WindowInnerLeftBorder" Value="Collapsed"/>
+                                    <Setter Property="Visibility" TargetName="WindowInnerRightBorder" Value="Collapsed"/>
+                                    <Setter Property="Visibility" TargetName="WindowInnerBottomBorder" Value="Collapsed"/>
+                                    <Setter Property="Visibility" TargetName="dropShadow" Value="Collapsed"/>
+                                </MultiTrigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsMaximizedFrameVisible" Value="False"/>
+                    <Condition Property="WindowState" Value="Maximized"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="CornerRadius" Value="0"/>
+            </MultiTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="docking:RaftingWindow">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type docking:RaftingWindow}">
+                    <docking:WindowControl Name="PART_WindowControl" WindowStyle="ToolWindow" Style="{StaticResource WindowControlStyle1}" HasTitleBar="False" themes:ThemeProperties.UseAlternateStyle="True" docking:WindowControl.CornerRadius="{TemplateBinding themes:ThemeProperties.CornerRadius}" docking:WindowControl.HasMaximizeButton="True" docking:WindowControl.HasRestoreButton="True" ContentControl.Content="{TemplateBinding ContentControl.Content}" ContentControl.ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentControl.ContentTemplateSelector="{TemplateBinding ContentControl.ContentTemplateSelector}" Control.Background="{DynamicResource {x:Static themes:AssetResourceKeys.WorkspaceVeryDarkBackgroundNormalBrushKey}}" Control.BorderBrush="{TemplateBinding Control.BorderBrush}" Control.BorderThickness="{TemplateBinding Control.BorderThickness}" />
+                    <!--						<Grid Name="PART_WindowControl"/>-->
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="docking:RaftingWindow.TitleBarVisibility" Value="Auto" />
+                                <Condition Property="docking:RaftingWindow.HasSingleContainer" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="PART_WindowControl" Property="docking:WindowControl.HasTitleBar" Value="True" />
+                        </MultiTrigger>
+                        <Trigger Property="docking:RaftingWindow.TitleBarVisibility" Value="Visible">
+                            <Setter TargetName="PART_WindowControl" Property="docking:WindowControl.HasTitleBar" Value="True" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

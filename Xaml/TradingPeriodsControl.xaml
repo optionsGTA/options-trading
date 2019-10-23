@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="OptionBot.Xaml.TradingPeriodsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:themes="http://schemas.actiprosoftware.com/winfx/xaml/themes"
+             xmlns:optionBot="clr-namespace:OptionBot"
+             xmlns:xaml="clr-namespace:OptionBot.Xaml"
+             x:Name="_self"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance optionBot:VMRobot}"
+             d:DesignHeight="300" d:DesignWidth="300">
+
+    <UserControl.Resources>
+        <xaml:EnumToStringConverter x:Key="enumtostr"/>
+    </UserControl.Resources>
+
+    <DockPanel LastChildFill="True">
+        <Grid>
+            <xaml:MyDataGrid x:Name="_datagrid" SaveSettingsKey="tradingperiods" IsReadOnly="True" ItemsSource="{Binding ConfigProvider.TradingPeriods.List}" SelectionMode="Single" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AutoGenerateColumns="False" CanUserSortColumns="True">
+                <xaml:MyDataGrid.InputBindings>
+                    <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding CommandShowParameters}" CommandParameter="{Binding ElementName=_datagrid, Path=SelectedItem}"/>
+                </xaml:MyDataGrid.InputBindings>
+                <xaml:MyDataGrid.Columns>
+                    <DataGridTemplateColumn Header="autostop mm" Width="40">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox ToolTip="Автоматическая остановка стратегий ММ при выполнении обязательств по времени."
+                                          IsChecked="{Binding UI.StopMMByTimePercent, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTextColumn Binding="{Binding Effective.PeriodType, Converter={StaticResource enumtostr}}" Header="type" Width="150"/>
+                    <DataGridTextColumn Binding="{Binding Effective.ShiftDeltaHedge}" Header="delta hedge shift" Width="55"/>
+                    <DataGridTextColumn Binding="{Binding Effective.ShiftStart}" Header="start shift" Width="55"/>
+                    <DataGridTextColumn Binding="{Binding Effective.ShiftEnd}" Header="end shift" Width="55"/>
+                </xaml:MyDataGrid.Columns>
+
+                <xaml:MyDataGrid.RowStyle>
+                    <Style TargetType="DataGridRow" BasedOn="{StaticResource {x:Static themes:DataGridResourceKeys.DataGridRowStyleKey}}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsEffectiveConfigUpToDate}" Value="False">
+                                <Setter Property="Background" Value="LightPink"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </xaml:MyDataGrid.RowStyle>
+            </xaml:MyDataGrid>
+        </Grid>
+    </DockPanel>
+</UserControl>

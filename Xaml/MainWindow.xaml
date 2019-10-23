@@ -1,0 +1,344 @@
+﻿<ribbon:RibbonWindow x:Class="OptionBot.Xaml.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:p="clr-namespace:OptionBot.Properties"
+        xmlns:local="clr-namespace:OptionBot"
+        xmlns:ecngcomm="clr-namespace:Ecng.Xaml.Converters;assembly=Ecng.Xaml"
+        xmlns:themes="http://schemas.actiprosoftware.com/winfx/xaml/themes"
+        xmlns:docking="http://schemas.actiprosoftware.com/winfx/xaml/docking"
+        xmlns:ribbon="http://schemas.actiprosoftware.com/winfx/xaml/ribbon"
+        xmlns:xaml="clr-namespace:OptionBot.Xaml"
+        xmlns:shared="http://schemas.actiprosoftware.com/winfx/xaml/shared"
+        xmlns:gauge="http://schemas.actiprosoftware.com/winfx/xaml/gauge"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        ApplicationName="{Binding WindowTitle}"
+        IsGlassEnabled="False" ResizeMode="CanResizeWithGrip"
+        WindowStartupLocation="CenterScreen"
+        Height="{Binding Source={x:Static p:Settings.Default}, Path=WindowHeight, Mode=TwoWay}"
+        Width="{Binding Source={x:Static p:Settings.Default}, Path=WindowWidth, Mode=TwoWay}"
+        Left="{Binding Source={x:Static p:Settings.Default}, Path=WindowLeft, Mode=TwoWay}"
+        Top="{Binding Source={x:Static p:Settings.Default}, Path=WindowTop, Mode=TwoWay}">
+
+    <Window.DataContext>
+        <local:VMRobot/>
+    </Window.DataContext>
+    
+    <Window.Resources>
+        <Style x:Key="infotbstyle" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="3,0"/>
+            <Setter Property="FontSize" Value="12"></Setter>
+        </Style>
+        <Style x:Key="hidezero" TargetType="TextBlock" BasedOn="{StaticResource infotbstyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" Value="0">
+                    <Setter Property="FrameworkElement.Visibility" Value="Hidden"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource Mode=Self}}" Value="">
+                    <Setter Property="FrameworkElement.Visibility" Value="Hidden"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="hidenull" TargetType="TextBlock" BasedOn="{StaticResource infotbstyle}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding}" Value="{x:Null}">
+                    <Setter Property="FrameworkElement.Visibility" Value="Hidden"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <ecngcomm:BoolToVisibilityConverter x:Key="booltovis" FalseVisibilityValue="Hidden"/>
+        <xaml:ConnectionStateToColorConverter x:Key="connstatetocolor"/>
+        <xaml:ConnectionStateToLedStateConverter x:Key="connstatetoledstate"/>
+        <xaml:EnumToStringConverter x:Key="enumtostr"/>
+        <xaml:ConnStateToCommandHeaderConverter x:Key="connstatetocmdstr"/>
+        <xaml:NumStrategiesToColorConverter x:Key="numStraToLedColor"/>
+        <xaml:NumStrategiesToStateDescription x:Key="numStraToDescription"/>
+    </Window.Resources>
+
+    <Window.ContextMenu>
+        <ContextMenu>
+            <MenuItem Click="MenuItemHeaders_OnClick" Header="Скрыть заголовки окон" x:Name="_menuItemHeaders"/>
+            <MenuItem Click="MenuItemToolbars_OnClick" Header="Скрыть панели инструментов" x:Name="_menuItemToolbars"/>
+        </ContextMenu>
+    </Window.ContextMenu>
+
+    <docking:DockSite x:Name="_dockSite" CanDocumentWindowsRaft="True" Padding="0" SplitterSize="2" ToolWindowsHaveImagesOnTabs="True" ItemContainerRetentionMode="Wrapped">
+        <docking:DockSite.Switcher>
+            <docking:StandardSwitcher AreDocumentsVisible="False"/>
+        </docking:DockSite.Switcher>
+
+        <docking:SplitContainer Orientation="Horizontal">
+            <docking:SplitContainer Orientation="Vertical">
+                <docking:SplitContainer Orientation="Horizontal" docking:DockSite.ControlSize="1250,600">
+                    <docking:ToolWindowContainer docking:DockSite.ControlSize="270,600" x:Name="_settingsContainer">
+                        <docking:ToolWindow x:Name="_wndGeneralSettings" Title="Общие параметры" ImageSource="/img/Properties16.png">
+                            <xaml:ObjectParamsControl SelectedObject="{Binding ConfigProvider.General}"/>
+                        </docking:ToolWindow>
+                        <docking:ToolWindow x:Name="_wndObjectParams" Title="{Binding ElementName=_controlObjParams, Path=WindowName}" ImageSource="/img/Properties16.png">
+                            <xaml:ObjectParamsControl x:Name="_controlObjParams" SelectedObject="{Binding SelectedConfigObject}">
+                                <xaml:ObjectParamsControl.Style>
+                                    <Style TargetType="{x:Type xaml:ObjectParamsControl}">
+                                        <Setter Property="WindowName" Value="{Binding SelectedConfigObject.ConfigName}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedConfigObject}" Value="{x:Null}">
+                                                <Setter Property="WindowName" Value="Параметры объекта"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </xaml:ObjectParamsControl.Style>
+                            </xaml:ObjectParamsControl>
+                        </docking:ToolWindow>
+                    </docking:ToolWindowContainer>
+
+                    <docking:SplitContainer Orientation="Vertical" docking:DockSite.ControlSize="850,620">
+                        <docking:ToolWindowContainer docking:DockSite.ControlSize="850,100">
+                            <docking:ToolWindow x:Name="_wndFutures" Title="Фьючерсы">
+                                <xaml:FuturesControl x:Name="_controlFutures"/>
+                            </docking:ToolWindow>
+                        </docking:ToolWindowContainer>
+
+                        <docking:SplitContainer Orientation="Horizontal">
+                            <docking:ToolWindowContainer docking:DockSite.ControlSize="250,340">
+                                <docking:ToolWindow x:Name="_wndSeries" Title="Серии опционов">
+                                    <xaml:SeriesControl/>
+                                </docking:ToolWindow>
+                                <docking:ToolWindow x:Name="_wndPortfolio" Title="Портфель">
+                                    <xaml:PortfolioControl/>
+                                </docking:ToolWindow>
+                            </docking:ToolWindowContainer>
+                            <docking:ToolWindowContainer docking:DockSite.ControlSize="600,340">
+                                <docking:ToolWindow x:Name="_wndOptions" Title="Опционы">
+                                    <xaml:OptionsControl x:Name="_controlOptions"/>
+                                </docking:ToolWindow>
+                                <docking:ToolWindow x:Name="_wndMMInfos" Title="MM Obligations">
+                                    <xaml:MMInfoControl x:Name="_controlMMInfos"/>
+                                </docking:ToolWindow>
+                                <docking:ToolWindow x:Name="_wndVolumes" Title="Объемы">
+                                    <xaml:VolumeTableControl x:Name="_controlVolumes" DataContext="{Binding RobotData.VolStats}"/>
+                                </docking:ToolWindow>
+                            </docking:ToolWindowContainer>
+                        </docking:SplitContainer>
+
+                        <docking:ToolWindowContainer docking:DockSite.ControlSize="850,180">
+                            <docking:ToolWindow x:Name="_wndStrategies" Title="Стратегии">
+                                <xaml:StrategiesControl x:Name="_controlStrategies"/>
+                            </docking:ToolWindow>
+                        </docking:ToolWindowContainer>
+                    </docking:SplitContainer>
+
+                    <docking:ToolWindowContainer docking:DockSite.ControlSize="130,600" x:Name="_mdepthContainer">
+                        <docking:ToolWindow x:Name="_wndMarketDepths" Title="Стаканы" ImageSource="/img/marketdepth16.png">
+                            <xaml:MarketDepthsControl x:Name="_controlMarketDepths"/>
+                        </docking:ToolWindow>
+                    </docking:ToolWindowContainer>
+                </docking:SplitContainer>
+
+                <docking:SplitContainer Orientation="Horizontal" docking:DockSite.ControlSize="1250,180">
+                    <docking:ToolWindowContainer docking:DockSite.ControlSize="650,180" x:Name="_logsContainer">
+                        <docking:ToolWindow x:Name="_wndLogs" Title="Сообщения" ImageSource="/img/Output16.png">
+                            <xaml:LogsControl x:Name="_logsControl"/>
+                        </docking:ToolWindow>
+                    </docking:ToolWindowContainer>
+                    <docking:ToolWindowContainer docking:DockSite.ControlSize="600,180" x:Name="_ordersTradesContainer">
+                        <docking:ToolWindow x:Name="_wndValParams" Title="Параметры оценки рынка" ImageSource="/img/Properties16.png">
+                            <xaml:ValuationParamsControl x:Name="_controlValuationParams"/>
+                        </docking:ToolWindow>
+                        <docking:ToolWindow x:Name="_wndOrders" Title="Заявки" ImageSource="/img/order16.png">
+                            <xaml:OrdersControl Orders="{Binding RobotData.AllOrders}"/>
+                        </docking:ToolWindow>
+                        <docking:ToolWindow x:Name="_wndActiveOrders" Title="Активные заявки" ImageSource="/img/order16.png">
+                            <xaml:OrdersControl Orders="{Binding RobotData.AllActiveOrders}"/>
+                        </docking:ToolWindow>
+                        <docking:ToolWindow x:Name="_wndTrades" Title="Сделки" ImageSource="/img/trades.png">
+                            <xaml:TradesControl/>
+                        </docking:ToolWindow>
+                        <docking:ToolWindow x:Name="_wndTradingPeriods" Title="Сессия" ImageSource="/img/Properties16.png">
+                            <xaml:TradingPeriodsControl/>
+                        </docking:ToolWindow>
+                    </docking:ToolWindowContainer>
+                </docking:SplitContainer>
+            </docking:SplitContainer>
+        </docking:SplitContainer>
+    </docking:DockSite>
+
+    <ribbon:RibbonWindow.StatusBar>
+        <StatusBar Style="{DynamicResource {x:Static themes:SharedResourceKeys.StatusBarStyleKey}}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+            <StatusBar.Resources>
+                <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                </Style>
+            </StatusBar.Resources>
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="115" />
+                            <ColumnDefinition Width="135" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+
+            <StatusBarItem Grid.Column="0" Padding="3,0,0,0" HorizontalContentAlignment="Stretch">
+                <shared:PopupButton DisplayMode="Merged" IsRounded="True" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                                    IsTransparencyModeEnabled="True" Style="{DynamicResource {x:Static themes:SharedResourceKeys.EmbeddedPopupButtonOverrideStyleKey}}">
+                    <shared:PopupButton.PopupMenu>
+                        <ContextMenu>
+                            <MenuItem Header="{Binding RobotData.ConnectionState, Converter={StaticResource connstatetocmdstr}}" Command="{Binding CommandConnectDisconnect}"/>
+                        </ContextMenu>
+                    </shared:PopupButton.PopupMenu>
+
+                    <shared:PopupButton.Content>
+                        <Grid HorizontalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <gauge:Led LedBorderThickness="0" IsRimEffectEnabled="False" LedRadiusRatio="1" LedBackground="Black" Width="18" Height="18"
+                                   LedOffOpacity="0.4" LedOnOpacity="1" Margin="0,0,3,0"
+                                   LedForeground="{Binding RobotData.ConnectionState, Converter={StaticResource connstatetocolor}}"
+                                   LedState="{Binding RobotData.ConnectionState, Converter={StaticResource connstatetoledstate}}"
+                                   Radius="9"/>
+                            <TextBlock Grid.Column="1" Text="{Binding RobotData.ConnectionState, Converter={StaticResource enumtostr}}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        </Grid>
+                    </shared:PopupButton.Content>
+                </shared:PopupButton>
+            </StatusBarItem>
+            
+            <StatusBarItem Grid.Column="1" Padding="3,0" HorizontalContentAlignment="Stretch" Margin="0,0,3,0">
+                <shared:PopupButton DisplayMode="Merged" IsRounded="True" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                                    IsTransparencyModeEnabled="True" Style="{DynamicResource {x:Static themes:SharedResourceKeys.EmbeddedPopupButtonOverrideStyleKey}}">
+                    <shared:PopupButton.PopupMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Остановить все стратегии" Command="{Binding CommandStopAllStrategies}"/>
+                            <MenuItem Header="Снять заявки по всем инструментам" Command="{Binding CommandCancelAllOrders}"/>
+                            <MenuItem Header="Закрыть все позиции" Command="{Binding CommandCloseAllPositions}"/>
+                        </ContextMenu>
+                    </shared:PopupButton.PopupMenu>
+
+                    <shared:PopupButton.Content>
+                        <Grid HorizontalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <gauge:Led LedBorderThickness="0" IsRimEffectEnabled="False" LedRadiusRatio="1" LedBackground="Black" Width="18" Height="18"
+                                   LedOffOpacity="0.4" LedOnOpacity="1" Margin="0,0,3,0"
+                                   LedState="On"
+                                   Radius="9">
+                                <gauge:Led.LedForeground>
+                                    <MultiBinding Converter="{StaticResource numStraToLedColor}">
+                                        <Binding Path="RobotData.NumRunningStrategies"/>
+                                    </MultiBinding>
+                                </gauge:Led.LedForeground>
+                            </gauge:Led>
+                            <TextBlock Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource numStraToDescription}">
+                                        <Binding Path="RobotData.NumRunningStrategies"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </Grid>
+                    </shared:PopupButton.Content>
+                </shared:PopupButton>
+            </StatusBarItem>
+
+            <Separator Grid.Column="2"/>
+
+            <StatusBarItem Grid.Column="3" HorizontalContentAlignment="Stretch" Margin="0">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel.Resources>
+                        <xaml:TimeSpanToDelayStringConverter x:Key="delayconv"/>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </StackPanel.Resources>
+
+                    <StackPanel MinWidth="160" Orientation="Horizontal">
+                        <TextBlock>
+                            <Run Text="Транзакций: "/><Run Text="{Binding RobotData.NumTransactions}" FontWeight="SemiBold" FontSize="12"/><Run Text=" ("/><Run Text="{Binding RobotData.NumTransactionsPerSecond}"/><Run Text="/сек)"/>
+                        </TextBlock>
+                    </StackPanel>
+
+                    <StackPanel MinWidth="95" Orientation="Horizontal">
+                        <TextBlock Text="Акт. заявок: "/>
+                        <TextBlock Text="{Binding RobotData.NumActiveOrders}" FontWeight="SemiBold" FontSize="12"/>
+                    </StackPanel>
+
+                    <StackPanel MinWidth="100" Orientation="Horizontal">
+                        <TextBlock Text="Задержка:  "/>
+                        <TextBlock Text="{Binding RobotData.MarketDataDelay, Converter={StaticResource delayconv}}" FontWeight="SemiBold" FontSize="12"/>
+                    </StackPanel>
+                </StackPanel>
+            </StatusBarItem>
+
+            <Separator Grid.Column="4"/>
+
+            <StatusBarItem Grid.Column="5" HorizontalContentAlignment="Stretch" Margin="3,0">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel.Resources>
+                        <xaml:EnumToStringConverter x:Key="enumtostr"/>
+                        <xaml:TimeleftToStringConverter x:Key="timeleftConv"/>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </StackPanel.Resources>
+
+                    <StackPanel MinWidth="240" Orientation="Horizontal">
+                        <TextBlock Text="Рынок: "/>
+                        <TextBlock Text="{Binding RobotData.MarketPeriod, Converter={StaticResource enumtostr}}" FontWeight="SemiBold" FontSize="12"/>
+                        <TextBlock FontSize="12">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding RobotData.MarketPeriodTimeLeft}" Value="{x:Static system:TimeSpan.MaxValue}">
+                                            <Setter Property="Visibility" Value="Hidden"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        <Run Text=" ("/><Run Text="{Binding RobotData.MarketPeriodTimeLeft, Converter={StaticResource timeleftConv}}"/><Run Text=")"/>
+                        </TextBlock>
+                    </StackPanel>
+
+
+                    <StackPanel MinWidth="240" Orientation="Horizontal">
+                        <TextBlock Text="Робот: "/>
+                        <TextBlock Text="{Binding RobotData.RobotPeriod, Converter={StaticResource enumtostr}}" FontWeight="SemiBold" FontSize="12"/>
+                        <TextBlock FontSize="12">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding RobotData.RobotPeriodTimeLeft}" Value="{x:Static system:TimeSpan.MaxValue}">
+                                            <Setter Property="Visibility" Value="Hidden"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                            <Run Text=" ("/><Run Text="{Binding RobotData.RobotPeriodTimeLeft, Converter={StaticResource timeleftConv}}"/><Run Text=")"/>
+                        </TextBlock>
+                    </StackPanel>
+                </StackPanel>
+            </StatusBarItem>
+
+            <Separator Grid.Column="6"/>
+
+            <StatusBarItem Grid.Column="7" HorizontalContentAlignment="Stretch" Margin="3,0">
+                <TextBlock VerticalAlignment="Center" FontFamily="Arial" HorizontalAlignment="Right"
+                            Text="{Binding RobotData.CurrentTime, StringFormat=HH:mm:ss}" FontSize="16" Margin="0,-2,20,-2" FontWeight="Bold">
+                    <TextBlock.ToolTip>
+                        <ToolTip Content="{Binding RobotData.CurrentTime}" ContentStringFormat="D"/>
+                    </TextBlock.ToolTip>
+                </TextBlock>
+            </StatusBarItem>
+
+        </StatusBar>
+    </ribbon:RibbonWindow.StatusBar>
+</ribbon:RibbonWindow>

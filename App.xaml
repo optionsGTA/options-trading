@@ -1,0 +1,54 @@
+﻿<Application x:Class="OptionBot.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:docking="http://schemas.actiprosoftware.com/winfx/xaml/docking"
+             xmlns:shared="http://schemas.actiprosoftware.com/winfx/xaml/shared"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             Startup="Application_Startup"
+             StartupUri="Xaml/MainWindow.xaml">
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Xaml/ApplicationStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="docking:DockSite">
+                <Setter Property="CanToolWindowsAutoHide" Value="True"/>
+                <Setter Property="CanToolWindowsBecomeDocuments" Value="False"/>
+                <Setter Property="CanToolWindowsClose" Value="False"/>
+                <Setter Property="CanToolWindowsDragToLinkedDockSites" Value="True"/>
+                <Setter Property="ToolWindowsHaveOptions" Value="False"/>
+                <Setter Property="CanToolWindowsDockLeft" Value="True"/>
+                <Setter Property="CanToolWindowsDockRight" Value="True"/>
+                <Setter Property="CanToolWindowsDockTop" Value="True"/>
+                <Setter Property="CanToolWindowsDockBottom" Value="True"/>
+                <Setter Property="CanToolWindowsMaximize" Value="False"/>
+                <Setter Property="CanToolWindowTabsToggleStateOnDoubleClick" Value="False"/>
+                <Setter Property="AutoHidePopupOpenDelay" Value="0:0:0.1"/>
+                <Setter Property="AutoHidePopupCloseDelay" Value="0:0:0.3"/>
+                <Setter Property="AutoHidePopupOpenAnimationDuration" Value="0:0:0.1"/>
+                <Setter Property="AutoHidePopupCloseAnimationDuration" Value="0:0:0.1"/>
+                <Setter Property="AutoHidePopupOpenAnimation" Value="None"/>
+                <Setter Property="AutoHidePopupCloseAnimation" Value="None"/>
+                <Setter Property="AutoHidePopupOpensOnMouseHover" Value="True"/>
+            </Style>
+
+            <Style TargetType="docking:ToolWindow">
+                <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+                <Setter Property="Padding" Value="0"/>
+            </Style>
+
+            <Style TargetType="docking:ToolWindowContainer">
+                <Setter Property="SingleTabLayoutBehavior" Value="Hide"/>
+            </Style>
+
+            <system:String x:Key="fmt5">{0:0.00000;-0.00000;#}</system:String>
+            <system:String x:Key="fmt4">{0:0.0000;-0.0000;#}</system:String>
+            <system:String x:Key="fmt3">{0:0.000;-0.000;#}</system:String>
+            <system:String x:Key="fmt2">{0:0.00;-0.00;#}</system:String>
+            <system:String x:Key="fmt1">{0:0.0;-0.0;#}</system:String>
+            <system:String x:Key="fmt0">{0:0;-0;#}</system:String>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

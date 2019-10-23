@@ -1,0 +1,88 @@
+﻿<UserControl x:Class="OptionBot.Xaml.MarketDepthsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:xaml="clr-namespace:OptionBot.Xaml"
+             xmlns:themes="http://schemas.actiprosoftware.com/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             x:Name="_self"
+             d:DesignHeight="300" d:DesignWidth="300">
+
+    <UserControl.Resources>
+        <xaml:BooleanToVisibilityConverter x:Key="booltovis"/>
+        <CollectionViewSource x:Key="SecuritiesView" Source="{Binding Securities, ElementName=_self}"/>
+    </UserControl.Resources>
+    
+    <DockPanel LastChildFill="True">
+        <ToolBar DockPanel.Dock="Top" themes:ThemeProperties.UseAlternateStyle="True" Visibility="{Binding ConfigProvider.UI.ShowToolbars, Converter={StaticResource booltovis}}">
+            <Button ToolTip="Скрыть выделенный стакан" Command="{Binding CommandHideMarketDepth}" CommandParameter="{Binding ElementName=_list, Path=SelectedItem}" Margin="5,0">
+                <Image Source="/img/cross.png" Height="16"/>
+            </Button>
+            <Button ToolTip="Выделить соответствующий инструмент" Command="{Binding CommandSyncDepthToSecurity}" CommandParameter="{Binding ElementName=_list, Path=SelectedItem}" Margin="5,0">
+                <Image Source="/img/sync.png" Height="16"/>
+            </Button>
+            <Button ToolTip="Сортировать стаканы" Command="{Binding CommandSortMarketDepths}" Margin="5,0">
+                <Image Source="/img/sort.png" Height="16"/>
+            </Button>
+        </ToolBar>
+
+        <ListBox x:Name="_list"  BorderThickness="0" ItemsSource="{Binding Source={StaticResource SecuritiesView}}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListBox.Resources>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                    <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                    <Setter Property="Padding" Value="1"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                                    <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="true">
+                                        <Setter Property="Background" TargetName="Bd" Value="DarkRed"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+                                    </Trigger>
+                                    <MultiTrigger>
+                                        <MultiTrigger.Conditions>
+                                            <Condition Property="IsSelected" Value="true"/>
+                                            <Condition Property="Selector.IsSelectionActive" Value="false"/>
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}}"/>
+                                    </MultiTrigger>
+                                    <Trigger Property="IsEnabled" Value="false">
+                                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListBox.Resources>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Margin="1">
+                        <ToggleButton IsChecked="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBoxItem}}, Path=IsSelected}">
+                            <ToggleButton.Template>
+                                <ControlTemplate TargetType="ToggleButton">
+                                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                                </ControlTemplate>
+                            </ToggleButton.Template>
+
+                            <xaml:MarketDepthControl/>
+
+                        </ToggleButton>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
+    </DockPanel>
+</UserControl>

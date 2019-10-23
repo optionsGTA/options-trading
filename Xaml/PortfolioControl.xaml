@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="OptionBot.Xaml.PortfolioControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:optionBot="clr-namespace:OptionBot"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance optionBot:VMRobot}"
+             d:DesignHeight="300" d:DesignWidth="300">
+   
+    <UserControl.Resources>
+        <Style x:Key="infotbstyle" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="3,7"/>
+            <Setter Property="FontSize" Value="14"></Setter>
+        </Style>
+    </UserControl.Resources>
+   
+    <Grid>
+        <Grid Margin="5,10" VerticalAlignment="Center" HorizontalAlignment="Center" MinWidth="150">
+            <Grid.Resources>
+                <Style TargetType="TextBlock" BasedOn="{StaticResource infotbstyle}"/>
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Вар. маржа:" HorizontalAlignment="Right"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Деньги:" HorizontalAlignment="Right"/>
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Заблокировано:" HorizontalAlignment="Right"/>
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="Свободно:" HorizontalAlignment="Right"/>
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="Комиссия:" HorizontalAlignment="Right"/>
+
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding RobotData.ActivePortfolio.VariationMargin, StringFormat=C0}" FontWeight="Bold"/>
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding RobotData.ActivePortfolio.CurrentValue, StringFormat=C0}" FontWeight="Bold"/>
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding RobotData.ActivePortfolio.BlockedMoney, StringFormat=C0}" FontWeight="Bold"/>
+            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding RobotData.ActivePortfolio.FreeMoney, StringFormat=C0}" FontWeight="Bold"/>
+            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding RobotData.ActivePortfolio.Commission, StringFormat=C0}" FontWeight="Bold"/>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -1,0 +1,222 @@
+﻿<UserControl x:Class="OptionBot.Xaml.MarketDepthControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:xaml="clr-namespace:OptionBot.Xaml"
+             xmlns:themes="http://schemas.actiprosoftware.com/winfx/xaml/themes"
+             xmlns:robot="clr-namespace:OptionBot.robot"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d"
+             FontSize="12" FontFamily="Tahoma" 
+             Width="134"
+             Background="Transparent"
+             x:Name="_self"
+             d:DataContext="{d:DesignInstance robot:OptionInfo}"
+             d:DesignHeight="200" d:DesignWidth="150">
+    <!--d:DataContext="{d:DesignInstance robot:SecurityInfo}"-->
+
+    <UserControl.Resources>
+        <Style TargetType="GridSplitter" BasedOn="{StaticResource {x:Type GridSplitter}}">
+            <Setter Property="Background" Value="{DynamicResource {x:Static themes:AssetResourceKeys.ListBorderNormalBrushKey}}"/>
+            <Setter Property="Width" Value="1"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="IsTabStop" Value="False"/>
+            <Setter Property="IsEnabled" Value="False"/>
+        </Style>
+        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <xaml:OwnOrderToStringConverter x:Key="ownordconv"/>
+
+        <xaml:MarketDepthBrushConverter x:Key="brushconv"/>
+    </UserControl.Resources>
+    
+    <Grid Background="{Binding DataContext, ElementName=_self, Converter={StaticResource brushconv}}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" Text="Future">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Type}" Value="Future">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <TextBlock Grid.Column="0" Text="{Binding OptionType}">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                        <Setter Property="Visibility" Value="Visible"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Type}" Value="Future">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
+            <TextBlock Grid.Column="1" Margin="10,0,0,0">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                        <Setter Property="Text" Value="{Binding AtmShift.ShiftString}"/>
+                        <Setter Property="Visibility" Value="Visible"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Type}" Value="Future">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding AtmShift}" Value="{x:Null}">
+                                <Setter Property="Text" Value="—"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            
+            <TextBlock Grid.Column="2" HorizontalAlignment="Right" Text="{Binding Code}"/>
+        </Grid>
+
+        <Border Grid.Row="1" BorderBrush="{DynamicResource {x:Static themes:AssetResourceKeys.ListBorderNormalBrushKey}}" BorderThickness="1">
+            <Grid IsSharedSizeScope="True">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.Resources>
+                    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}" x:Key="quoteStyle">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding DataContext.GreeksRegime, ElementName=_self}" Value="Illiquid">
+                                <Setter Property="Foreground" Value="Red"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Highlight}" Value="True">
+                                <Setter Property="FontWeight" Value="Bold"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Resources>
+
+                <ItemsControl ItemsSource="{Binding Path=MarketDepth.Offers}" HorizontalAlignment="Stretch">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid HorizontalAlignment="Stretch">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40" SharedSizeGroup="Column1Size"/>
+                                    <ColumnDefinition Width="1"/>
+                                    <ColumnDefinition Width="50" SharedSizeGroup="Price"/>
+                                    <ColumnDefinition Width="1"/>
+                                    <ColumnDefinition Width="40" SharedSizeGroup="Column2Size"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="16"/>
+                                    <RowDefinition Height="1"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Text="{Binding Volume, StringFormat='#.###'}" Style="{StaticResource quoteStyle}" HorizontalAlignment="Right" Margin="0,0,3,0"/>
+                                <GridSplitter Grid.Column="1"/>
+                                <TextBlock Grid.Column="2" Text="{Binding Price, StringFormat='#.###'}" Style="{StaticResource quoteStyle}" 
+                                           HorizontalAlignment="Right" Margin="0,0,4,0"/>
+                                <GridSplitter Grid.Column="3"/>
+                                <TextBlock Grid.Column="4" FontWeight="Black" Margin="2,0" Foreground="Blue" Text="{Binding OwnOrder, Converter={StaticResource ownordconv}}" HorizontalAlignment="Left"/>
+
+                                <Border Grid.Row="1" Grid.ColumnSpan="5" BorderThickness="0" Background="DimGray" HorizontalAlignment="Stretch"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <ItemsControl Grid.Row="2" ItemsSource="{Binding Path=MarketDepth.Bids}" HorizontalAlignment="Stretch">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid HorizontalAlignment="Stretch">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" SharedSizeGroup="Column1Size"/>
+                                    <ColumnDefinition Width="1"/>
+                                    <ColumnDefinition Width="*" SharedSizeGroup="Price"/>
+                                    <ColumnDefinition Width="1"/>
+                                    <ColumnDefinition Width="*" SharedSizeGroup="Column2Size"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1"/>
+                                    <RowDefinition Height="16"/>
+                                </Grid.RowDefinitions>
+
+                                <Border Grid.ColumnSpan="5" BorderThickness="0" Background="DimGray" HorizontalAlignment="Stretch"/>
+
+                                <TextBlock Grid.Row="1" FontWeight="Black" Margin="0,0,3,0" Foreground="Blue" Text="{Binding OwnOrder, Converter={StaticResource ownordconv}}" HorizontalAlignment="Right"/>
+                                <GridSplitter Grid.Row="1" Grid.Column="1"/>
+                                <TextBlock Grid.Row="1" Grid.Column="2" Style="{StaticResource quoteStyle}"
+                                           Text="{Binding Price, StringFormat='#.###'}" HorizontalAlignment="Right" Margin="0,0,4,0"/>
+                                <GridSplitter Grid.Row="1" Grid.Column="3"/>
+                                <TextBlock Grid.Row="1" Grid.Column="4" Style="{StaticResource quoteStyle}"
+                                           Text="{Binding Volume, StringFormat='#.###'}" HorizontalAlignment="Right" Margin="0,0,3,0"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+        </Border>
+
+        <TextBlock Grid.Row="2" Text="{Binding MyLastTradeStr}" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="3" Text="{Binding MarketDepth.LastExchangeTradeStr}" HorizontalAlignment="Center"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="4" HorizontalAlignment="Left">
+            <TextBlock>
+                <Run Text="Поз="/><Run Text="{Binding Position.CurrentValue, Mode=OneWay}"/>
+            </TextBlock>
+            <TextBlock>
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                        <Setter Property="Visibility" Value="Visible"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Type}" Value="Future">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+                <Run Text=",   δ="/><Run Text="{Binding EmpiricDelta, Mode=OneWay, StringFormat={StaticResource fmt2}}"/>
+            </TextBlock>
+        </StackPanel>
+        <Grid Grid.Row="5" HorizontalAlignment="Stretch" Margin="3,0">
+            <Grid.Style>
+                <Style TargetType="{x:Type Grid}">
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Type}" Value="Future">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" HorizontalAlignment="Left">
+                <Run Text="ivb="/><Run Text="{Binding IvBid, Mode=OneWay, StringFormat={StaticResource fmt3}}"/>
+            </TextBlock>
+            <TextBlock Grid.Column="1" HorizontalAlignment="Right">
+                <Run Text="ivo="/><Run Text="{Binding IvOffer, Mode=OneWay, StringFormat={StaticResource fmt3}}"/>
+            </TextBlock>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -1,0 +1,154 @@
+﻿<UserControl x:Class="OptionBot.Xaml.FuturesControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:themes="http://schemas.actiprosoftware.com/winfx/xaml/themes"
+             xmlns:optionBot="clr-namespace:OptionBot"
+             xmlns:xaml="clr-namespace:OptionBot.Xaml"
+             xmlns:editors="http://schemas.actiprosoftware.com/winfx/xaml/editors"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance optionBot:VMRobot}"
+             d:DesignHeight="300" d:DesignWidth="300">
+
+    <UserControl.Resources>
+<!--        <converters:InverseBooleanConverter x:Key="invbool"/>-->
+        <xaml:QuoteTradeToStringConverter x:Key="quoteToStr"/>
+        <xaml:BooleanToVisibilityConverter x:Key="booltovis"/>
+    </UserControl.Resources>
+    
+    <DockPanel LastChildFill="True">
+        <ToolBar DockPanel.Dock="Top" themes:ThemeProperties.UseAlternateStyle="True" Visibility="{Binding ConfigProvider.UI.ShowToolbars, Converter={StaticResource booltovis}}">
+            <editors:TextBox Width="50" MaxLength="7" Hint="код фьючерса" ToolTip="Код добавляемого фьючерса" x:Name="_tbNewCode" IsEnabled="{Binding RobotData.IsDisconnected}">
+                <editors:TextBox.InputBindings>
+                    <KeyBinding Command="{Binding CommandAddFuture}" CommandParameter="{Binding Path=Text, ElementName=_tbNewCode}" Key="Return" />
+                </editors:TextBox.InputBindings>
+            </editors:TextBox>
+            <Button ToolTip="Добавить фьючерс" Command="{Binding CommandAddFuture}" CommandParameter="{Binding Path=Text, ElementName=_tbNewCode}" Margin="0,0,10,0">
+                <Image Source="/img/plus.png" Height="16"/>
+            </Button>
+            <Button ToolTip="Удалить фьючерс" Command="{Binding CommandDeleteFuture}" CommandParameter="{Binding ElementName=_datagrid, Path=SelectedItem}" Margin="3,0">
+                <Image Source="/img/cross.png" Height="16"/>
+            </Button>
+            <Separator />
+            <Button ToolTip="Параметры выбранного фьючерса" Command="{Binding CommandShowParameters}" CommandParameter="{Binding ElementName=_datagrid, Path=SelectedItem}" Margin="3,0">
+                <Image Source="/img/Properties16.png" Height="16"/>
+            </Button>
+            <Button ToolTip="Стакан" Command="{Binding CommandShowMarketDepth}" CommandParameter="{Binding ElementName=_datagrid, Path=SelectedItems}" Margin="3,0">
+                <Image Source="/img/marketdepth16.png" Height="16"/>
+            </Button>
+            <Button ToolTip="Сохранить параметры выделенного фьючерса как набор параметров по-умолчанию для новых фьючерсов" Command="{Binding CommandSaveDefaultParams}" CommandParameter="{Binding ElementName=_datagrid, Path=SelectedItem}" Margin="3,0">
+                <Image Source="/img/save.png" Height="16"/>
+            </Button>
+            <Button ToolTip="Принудительный перерасчет ATM страйка для выделенных фьючерсов" Command="{Binding CommandForceRecalcATM}" CommandParameter="{Binding ElementName=_datagrid, Path=SelectedItems}" Margin="3,0">
+                <Image Source="/img/reset.png" Height="16"/>
+            </Button>
+        </ToolBar>
+        
+        <Grid>
+            <xaml:MyDataGrid x:Name="_datagrid" IsReadOnly="True" ItemsSource="{Binding Path=RobotData.AllFutures}" SaveSettingsKey="futures"
+                             SelectionMode="Extended" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AutoGenerateColumns="False">
+                <xaml:MyDataGrid.InputBindings>
+                    <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding CommandShowParameters}" CommandParameter="{Binding ElementName=_datagrid, Path=SelectedItem}"/>
+                </xaml:MyDataGrid.InputBindings>
+                <xaml:MyDataGrid.Columns>
+                    <DataGridTemplateColumn Header="Вкл" SortMemberPath="IsFutureActive" Width="40">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsFutureActive, UpdateSourceTrigger=PropertyChanged}" 
+                                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="is delta hedged" SortMemberPath="TradingModule.IsDeltaHedged" Width="40">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding TradingModule.IsDeltaHedged, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" IsEnabled="False"
+                                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Binding="{Binding Code}" Header="Код" Width="50"/>
+                    <DataGridTextColumn Binding="{Binding Position.CurrentValue, StringFormat={StaticResource fmt0}}" Header="balance" Width="40"/>
+                    <DataGridTextColumn Binding="{Binding TradingModule.HedgeStateStr}" Header="hedge state" Width="85"/>
+                    <DataGridTextColumn Binding="{Binding BestBid, Converter={StaticResource quoteToStr}}" Header="bid"/>
+                    <DataGridTextColumn Binding="{Binding BestAsk, Converter={StaticResource quoteToStr}}" Header="ask"/>
+                    <DataGridTextColumn Binding="{Binding BidAskTime, StringFormat=HH:mm:ss}" Header="time bidask"/>
+                    <DataGridTextColumn Binding="{Binding BidAskAverage}" Header="average"/>
+                    <DataGridTextColumn Binding="{Binding BidChange}" Header="bid change" Width="50"/>
+                    <DataGridTextColumn Binding="{Binding AskChange}" Header="ask change" Width="50"/>
+                    <DataGridTextColumn Binding="{Binding BidAskChange}" Header="change"/>
+                    <DataGridTextColumn Binding="{Binding CalculationBid}" Header="calc bid"/>
+                    <DataGridTextColumn Binding="{Binding CalculationAsk}" Header="calc ask"/>
+                    <DataGridTextColumn Binding="{Binding CalculationTime, StringFormat=HH:mm:ss}" Header="calc time"/>
+                    <DataGridTextColumn Binding="{Binding TimeValuationRun, StringFormat=HH:mm:ss}" Header="time val run"/>
+                    <DataGridTextColumn Binding="{Binding Exposition, StringFormat={StaticResource fmt3}}" Header="delta expos"/>
+                    <DataGridTextColumn Binding="{Binding VegaPortfolio, StringFormat={StaticResource fmt0}}" Header="vega port"/>
+                    <DataGridTextColumn Binding="{Binding VegaCallBuyLimit, StringFormat={StaticResource fmt0}}" Header="vega call buy limit"/>
+                    <DataGridTextColumn Binding="{Binding VegaPutBuyLimit, StringFormat={StaticResource fmt0}}" Header="vega put buy limit"/>
+                    <DataGridTextColumn Binding="{Binding VegaCallSellLimit, StringFormat={StaticResource fmt0}}" Header="vega call sell limit"/>
+                    <DataGridTextColumn Binding="{Binding VegaPutSellLimit, StringFormat={StaticResource fmt0}}" Header="vega put sell limit"/>
+                    <DataGridTextColumn Binding="{Binding VegaBuyLimit, StringFormat={StaticResource fmt0}}" Header="vega buy limit"/>
+                    <DataGridTextColumn Binding="{Binding VegaSellLimit, StringFormat={StaticResource fmt0}}" Header="vega sell limit"/>
+                    <DataGridTextColumn Binding="{Binding MMVegaBuyLimit, StringFormat={StaticResource fmt0}}" Header="mm vega buy limit"/>
+                    <DataGridTextColumn Binding="{Binding MMVegaSellLimit, StringFormat={StaticResource fmt0}}" Header="mm vega sell limit"/>
+                    <DataGridTextColumn Binding="{Binding VegaBuyTarget, StringFormat={StaticResource fmt0}}" Header="vega buy target"/>
+                    <DataGridTextColumn Binding="{Binding VegaSellTarget, StringFormat={StaticResource fmt0}}" Header="vega sell target"/>
+                    <DataGridTextColumn Binding="{Binding GammaPortfolio, StringFormat={StaticResource fmt1}}" Header="gamma port"/>
+                    <DataGridTextColumn Binding="{Binding GammaBuyLimit, StringFormat={StaticResource fmt0}}" Header="gamma buy limit"/>
+                    <DataGridTextColumn Binding="{Binding GammaSellLimit, StringFormat={StaticResource fmt0}}" Header="gamma sell limit"/>
+                    <DataGridTextColumn Binding="{Binding MMGammaBuyLimit, StringFormat={StaticResource fmt0}}" Header="mm gamma buy limit"/>
+                    <DataGridTextColumn Binding="{Binding MMGammaSellLimit, StringFormat={StaticResource fmt0}}" Header="mm gamma sell limit"/>
+                    <DataGridTextColumn Binding="{Binding GammaBuyTarget, StringFormat={StaticResource fmt0}}" Header="gamma buy target"/>
+                    <DataGridTextColumn Binding="{Binding GammaSellTarget, StringFormat={StaticResource fmt0}}" Header="gamma sell target"/>
+                    <DataGridTextColumn Binding="{Binding ThetaPortfolio, StringFormat={StaticResource fmt2}}" Header="theta port"/>
+                    <DataGridTextColumn Binding="{Binding VannaPortfolio, StringFormat={StaticResource fmt1}}" Header="vanna portfolio"/>
+                    <DataGridTextColumn Binding="{Binding VannaLongLimit, StringFormat={StaticResource fmt0}}" Header="vanna long limit"/>
+                    <DataGridTextColumn Binding="{Binding VannaShortLimit, StringFormat={StaticResource fmt0}}" Header="vanna short limit"/>
+                    <DataGridTextColumn Binding="{Binding VommaPortfolio, StringFormat={StaticResource fmt1}}" Header="vomma portfolio"/>
+                    <DataGridTextColumn Binding="{Binding VommaLongLimit, StringFormat={StaticResource fmt0}}" Header="vomma long limit"/>
+                    <DataGridTextColumn Binding="{Binding VommaShortLimit, StringFormat={StaticResource fmt0}}" Header="vomma short limit"/>
+                    <DataGridTextColumn Binding="{Binding MinStepSize}" Header="min step"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.FuturesChangeStartTrigger}" Header="change limit"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.AtmStrikeDelay}" Header="atm delay"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.DeltaTarget}" Header="delta target"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.VegaTarget}" Header="vega target"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.VegaLLimit}" Header="vega L limit"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.VegaSLimit}" Header="vega S limit"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.VegaHedgeLLimit}" Header="vega hedge L limit"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.VegaHedgeSLimit}" Header="vega hedge S limit"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.VegaCallLongLimit}" Header="vega call long limit"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.VegaCallShortLimit}" Header="vega call short limit"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.VegaPutLongLimit}" Header="vega put long limit"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.VegaPutShortLimit}" Header="vega put short limit"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.MMVegaLongLimit}" Header="mm vega long limit"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.MMVegaShortLimit}" Header="mm vega short limit"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.GammaUnit}" Header="gamma unit"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.GammaTarget}" Header="gamma target"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.GammaLLimit}" Header="gamma L limit"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.GammaSLimit}" Header="gamma S limit"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.GammaHedgeLLimit}" Header="gamma hedge L limit"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.GammaHedgeSLimit}" Header="gamma hedge S limit"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.MMGammaLongLimit}" Header="mm gamma long limit"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.MMGammaShortLimit}" Header="mm gamma short limit"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.VannaUnit}" Header="vanna unit"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.VannaLLimit}" Header="vanna L limit"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.VannaSLimit}" Header="vanna S limit"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.VommaUnit}" Header="vomma unit"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.VommaLLimit}" Header="vomma L limit"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.VommaSLimit}" Header="vomma S limit"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.DeepInTheMoneyLimit}" Header="deep in the money limit"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.DeepOutOfMoneyLimit}" Header="deep out of money limit"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.DeepInTheMoneyDeltaCall}" Header="deep in the money delta call"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.DeepOutOfMoneyDeltaCall}" Header="deep out of money delta call"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.DeepInTheMoneyDeltaPut}" Header="deep in the money delta put"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.DeepOutOfMoneyDeltaPut}" Header="deep out of money delta put"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.AtTheMoneyDelta}" Header="at the money delta"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.LiquidStrikeStep}" Header="liquid strike step"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.LiquidSwitchFraction}" Header="liquid switch fraction"/>
+                    <DataGridTextColumn Binding="{Binding Config.Effective.DaysToExpirationForInitialDelta}" Header="days to exp for init delta"/>
+                </xaml:MyDataGrid.Columns>
+            </xaml:MyDataGrid>
+        </Grid>
+    </DockPanel>
+</UserControl>

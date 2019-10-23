@@ -1,0 +1,493 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3EE7745C-947F-4AA5-832C-14B7D59CADE5}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OptionBot</RootNamespace>
+    <AssemblyName>OptionBot</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>default</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>stocksharp.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ActiproSoftware.DataGrid.Contrib.Wpf, Version=14.2.610.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refs\ssharp\ActiproSoftware.DataGrid.Contrib.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="ActiproSoftware.Docking.Wpf, Version=14.2.610.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refs\ssharp\ActiproSoftware.Docking.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="ActiproSoftware.Editors.Interop.DataGrid.Wpf, Version=14.2.610.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refs\ssharp\ActiproSoftware.Editors.Interop.DataGrid.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="ActiproSoftware.Editors.Wpf, Version=15.1.621.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refs\ssharp\ActiproSoftware.Editors.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="ActiproSoftware.Gauge.Wpf, Version=14.2.610.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refs\ssharp\ActiproSoftware.Gauge.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="ActiproSoftware.Ribbon.Wpf, Version=14.2.610.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refs\ssharp\ActiproSoftware.Ribbon.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="ActiproSoftware.Shared.Wpf, Version=14.2.610.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refs\ssharp\ActiproSoftware.Shared.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="ActiproSoftware.Themes.Metro.Wpf, Version=14.2.610.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refs\ssharp\ActiproSoftware.Themes.Metro.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="ActiproSoftware.Themes.Office.Wpf, Version=14.2.610.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refs\ssharp\ActiproSoftware.Themes.Office.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="AsyncHandler">
+      <HintPath>..\refs\ssharp\AsyncHandler.dll</HintPath>
+    </Reference>
+    <Reference Include="ContinuousLinq, Version=2.2.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refs\clinq\ContinuousLinq.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Collections">
+      <HintPath>..\refs\ssharp\Ecng.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Common">
+      <HintPath>..\refs\ssharp\Ecng.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.ComponentModel">
+      <HintPath>..\refs\ssharp\Ecng.ComponentModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Interop">
+      <HintPath>..\refs\ssharp\Ecng.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Serialization">
+      <HintPath>..\refs\ssharp\Ecng.Serialization.dll</HintPath>
+    </Reference>
+    <Reference Include="Ecng.Xaml">
+      <HintPath>..\refs\ssharp\Ecng.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="libalglib">
+      <HintPath>..\refs\ssharp\libalglib.dll</HintPath>
+    </Reference>
+    <Reference Include="MathNet.Numerics, Version=3.13.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refs\MathNet\MathNet.Numerics.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="MoreLinq">
+      <HintPath>..\refs\ssharp\MoreLinq.dll</HintPath>
+    </Reference>
+    <Reference Include="PowerCollections">
+      <HintPath>..\refs\ssharp\PowerCollections.dll</HintPath>
+    </Reference>
+    <Reference Include="SNTPClient">
+      <HintPath>..\refs\SNTPClient\SNTPClient.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Algo">
+      <HintPath>..\refs\ssharp\StockSharp.Algo.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Algo.Strategies">
+      <HintPath>..\refs\ssharp\StockSharp.Algo.Strategies.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.BusinessEntities">
+      <HintPath>..\refs\ssharp\StockSharp.BusinessEntities.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Logging">
+      <HintPath>..\refs\ssharp\StockSharp.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Messages">
+      <HintPath>..\refs\ssharp\StockSharp.Messages.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Plaza">
+      <HintPath>..\refs\ssharp\StockSharp.Plaza.dll</HintPath>
+    </Reference>
+    <Reference Include="StockSharp.Xaml">
+      <HintPath>..\refs\ssharp\StockSharp.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.Toolkit">
+      <HintPath>..\refs\ssharp\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Config\CalculatedSeriesParams.cs" />
+    <Compile Include="Config\ConfigSecuritySelection.cs" />
+    <Compile Include="Config\ConfigProvider_FileCfg.cs" />
+    <Compile Include="Config\CalculatedStrategyConfig.cs" />
+    <Compile Include="Config\ConfigSeries.cs" />
+    <Compile Include="Config\ConfigTradingPeriod.cs" />
+    <Compile Include="Config\ConfigUI.cs" />
+    <Compile Include="EmailSender.cs" />
+    <Compile Include="FastInvoke.cs" />
+    <Compile Include="MyPropertyOrderAttribute.cs" />
+    <Compile Include="RelayCommand.cs" />
+    <Compile Include="robot\ActiveObject.cs" />
+    <Compile Include="robot\ActiveOrdersObservableCollection.cs" />
+    <Compile Include="robot\BaseRobotStrategy.cs" />
+    <Compile Include="robot\BaseStrategy.cs" />
+    <Compile Include="robot\Connector.cs" />
+    <Compile Include="robot\CurveManager.cs" />
+    <Compile Include="robot\EntityFactoryEx.cs" />
+    <Compile Include="robot\FutureTradingModule.cs" />
+    <Compile Include="robot\HedgeCalculator.cs" />
+    <Compile Include="robot\HedgeStrategy.cs" />
+    <Compile Include="robot\MyTradeEx.cs" />
+    <Compile Include="robot\MyTransactionIdGenerator.cs" />
+    <Compile Include="robot\OptionModel.cs" />
+    <Compile Include="robot\OptionSeriesId.cs" />
+    <Compile Include="robot\OptionStrategy.cs" />
+    <Compile Include="robot\FilteredMarketDepth.cs" />
+    <Compile Include="robot\OrderWrapper.cs" />
+    <Compile Include="robot\OptionStrategyImpl.cs" />
+    <Compile Include="robot\OptionTradingModule.cs" />
+    <Compile Include="robot\OptionStrikeShift.cs" />
+    <Compile Include="robot\PlazaCommonListener.cs" />
+    <Compile Include="robot\PlazaExtension.cs" />
+    <Compile Include="robot\PlazaHeartbeatListener.cs" />
+    <Compile Include="robot\PlazaMMInfoListener.cs" />
+    <Compile Include="robot\PlazaPortfolioListener.cs" />
+    <Compile Include="robot\PlazaSessionListener.cs" />
+    <Compile Include="robot\PlazaTraderEx.cs" />
+    <Compile Include="robot\PlazaTransactionListener.cs" />
+    <Compile Include="robot\PortfolioEx.cs" />
+    <Compile Include="robot\ProxySubscriber.cs" />
+    <Compile Include="robot\RealtimeMonitor.cs" />
+    <Compile Include="robot\Robot.cs" />
+    <Compile Include="robot\RobotData_Data.cs" />
+    <Compile Include="robot\RobotHeart.cs" />
+    <Compile Include="robot\RobotLogger.cs" />
+    <Compile Include="robot\OrderEx.cs" />
+    <Compile Include="robot\Scheduler.cs" />
+    <Compile Include="robot\SecurityMainStrategy.cs" />
+    <Compile Include="robot\StrategyWrapper.cs" />
+    <Compile Include="robot\TimeKeeper.cs" />
+    <Compile Include="robot\TransactionRateController.cs" />
+    <Compile Include="robot\TransactionListener.cs" />
+    <Compile Include="robot\VolumeStats.cs" />
+    <Compile Include="ValTuples.cs" />
+    <Compile Include="VMRobot_Commands.cs" />
+    <Compile Include="VMRobot_Config.cs" />
+    <Compile Include="VMStrategy.cs" />
+    <Compile Include="Xaml\FuturesControl.xaml.cs">
+      <DependentUpon>FuturesControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LogHelper.cs" />
+    <Compile Include="Xaml\LoginWindow.xaml.cs">
+      <DependentUpon>LoginWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Xaml\LogsControl.xaml.cs">
+      <DependentUpon>LogsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Xaml\MarketDepthControl.xaml.cs">
+      <DependentUpon>MarketDepthControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Xaml\MarketDepthsControl.xaml.cs">
+      <DependentUpon>MarketDepthsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Xaml\MMInfoControl.xaml.cs">
+      <DependentUpon>MMInfoControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Xaml\MyDataGrid.xaml.cs">
+      <DependentUpon>MyDataGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Xaml\ObjectParamsControl.xaml.cs">
+      <DependentUpon>ObjectParamsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Xaml\OptionsControl.xaml.cs">
+      <DependentUpon>OptionsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Xaml\OrdersControl.xaml.cs">
+      <DependentUpon>OrdersControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Xaml\PortfolioControl.xaml.cs">
+      <DependentUpon>PortfolioControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Xaml\SeriesCalcParamsControl.xaml.cs">
+      <DependentUpon>SeriesCalcParamsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Xaml\SeriesControl.xaml.cs">
+      <DependentUpon>SeriesControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Xaml\StrategiesControl.xaml.cs">
+      <DependentUpon>StrategiesControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Xaml\TradesControl.xaml.cs">
+      <DependentUpon>TradesControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Xaml\TradingPeriodsControl.xaml.cs">
+      <DependentUpon>TradingPeriodsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Xaml\ValuationParamsControl.xaml.cs">
+      <DependentUpon>ValuationParamsControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Xaml\VolumeTableControl.xaml.cs">
+      <DependentUpon>VolumeTableControl.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Xaml\ApplicationStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Xaml\FuturesControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Xaml\LoginWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Xaml\LogsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Xaml\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Config\BaseConfig.cs" />
+    <Compile Include="Config\ConfigFuture.cs" />
+    <Compile Include="Config\ConfigGeneral.cs" />
+    <Compile Include="Config\ConfigProvider.cs" />
+    <Compile Include="Config\ConfigStrategy.cs" />
+    <Compile Include="Config\ConfigValuationParameters.cs" />
+    <Compile Include="robot\Controller.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="robot\Enums.cs" />
+    <Compile Include="robot\ITimer.cs" />
+    <Compile Include="robot\MMTimer.cs" />
+    <Compile Include="robot\RobotData.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="Util.cs" />
+    <Compile Include="ViewModelBase.cs" />
+    <Compile Include="VMRobot.cs" />
+    <Compile Include="Xaml\Converters.cs" />
+    <Compile Include="Xaml\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Xaml\MarketDepthControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Xaml\MarketDepthsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Xaml\MMInfoControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Xaml\MyDataGrid.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Xaml\ObjectParamsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Xaml\OptionsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Xaml\OrdersControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Xaml\PortfolioControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Xaml\PropertyGridStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Xaml\SeriesCalcParamsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Xaml\SeriesControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Xaml\StrategiesControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Xaml\TradesControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Xaml\TradingPeriodsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Xaml\ValuationParamsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Xaml\VolumeTableControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\hashpwd\hashpwd.csproj">
+      <Project>{0928d8cf-eca1-429c-99cc-90902177c4a1}</Project>
+      <Name>hashpwd</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NLogLogger\NLogLogger.csproj">
+      <Project>{370204B1-A96D-4182-B23F-7C154FD25298}</Project>
+      <Name>NLogLogger</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\check.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\folder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\page_white.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\saveas.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\undo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\Properties16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\marketdepth16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\Output16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\order16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\trades.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="stocksharp.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\cross.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\sync.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\reset.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\sort.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\filter.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
